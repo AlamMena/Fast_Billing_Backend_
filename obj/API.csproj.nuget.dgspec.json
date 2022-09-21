@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj": {}
+    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj": {}
   },
   "projects": {
-    "c:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj": {
+    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj",
+        "projectUniqueName": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj",
         "projectName": "API",
-        "projectPath": "c:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj",
+        "projectPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj",
         "packagesPath": "C:\\Users\\extamena\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\obj\\",
+        "outputPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\extamena\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -21,6 +21,7 @@
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,11 +44,21 @@
               "target": "Package",
               "version": "[11.0.1, )"
             },
+            "FirebaseAdmin": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.9, )"
             },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.9, )"
             },

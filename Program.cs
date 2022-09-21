@@ -1,4 +1,10 @@
 using API.Authentication;
+using API.Exceptions;
+using API.Extensions;
+using API.Mappers;
+using API.Services.Firebase;
+using API.Services.Users;
+using API.Swagger;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,37 +14,37 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+
+// adding dbcontext
+builder.Services.BuildContext();
+
+// auth services
+builder.Services.AddJwtAuthentication();
+builder.Services.AddSingleton<FirebaseInit>();
+builder.Services.AddHttpContextAccessor();
+
+
+
+// db services
+builder.Services.AddScoped<IUserManagement, UserManagement>();
+
+// lib services
+builder.Services.AddAutoMapper();
+builder.Services.AddSwagger();
+builder.Services.AddLogging();
+
+// cors
+builder.Services.AddCors(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "POS SYSTEM", Version = "v1.0.0" });
-
-    var securitySchema = new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme.",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        Reference = new OpenApiReference
+    options.AddPolicy(name: "WebCors",
+        builder =>
         {
-            Type = ReferenceType.SecurityScheme,
-            Id = "Bearer"
-        }
-    };
-
-    c.AddSecurityDefinition("Bearer", securitySchema);
-
-    var securityRequirement = new OpenApiSecurityRequirement
-                {
-                    { securitySchema, new[] { "Bearer" } }
-                };
-
-    c.AddSecurityRequirement(securityRequirement);
-
+            builder.WithHeaders("*");
+            builder.WithMethods("*");
+            builder.WithOrigins("*");
+        });
 });
 
-
-builder.Services.AddJwtAuthentication();
 
 var app = builder.Build();
 
@@ -49,11 +55,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCors("WebCors");
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.MapControllers();
 

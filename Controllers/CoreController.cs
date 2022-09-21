@@ -1,5 +1,6 @@
 using API.DbModels.Contexts;
 using API.DbModels.Core;
+using API.Dtos.Core;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
@@ -9,9 +10,9 @@ using Microsoft.EntityFrameworkCore;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-public class CoreController<TModel, TRequest> : ControllerBase
+public class CoreController<TModel, TDto> : ControllerBase
 where TModel : CoreModel
-where TRequest : EntityRequest
+where TDto : CoreDto
 
 {
     private readonly FbContext _context;
@@ -23,7 +24,7 @@ where TRequest : EntityRequest
         _mapper = mapper;
     }
 
-    private async Task<IActionResult> ValidateAsync(TRequest request)
+    private async Task<IActionResult> ValidateAsync(TDto request)
     {
         await Task.CompletedTask;
 
@@ -33,12 +34,12 @@ where TRequest : EntityRequest
     [HttpGet]
     public async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
     {
-        var response = new PaginatedResponse<TRequest>();
+        var response = new PaginatedResponse<TDto>();
 
         response.Data = await _context.Set<TModel>()
              .Skip((page - 1) * limit)
              .Take(limit)
-             .ProjectTo<TRequest>(_mapper.ConfigurationProvider)
+             .ProjectTo<TDto>(_mapper.ConfigurationProvider)
              .ToListAsync();
 
         if (!response.Data.Any())
@@ -57,7 +58,7 @@ where TRequest : EntityRequest
         var dbEntity = await _context.Set<TModel>()
             .FirstOrDefaultAsync(d => d.Id == id);
 
-        var responseEntity = _mapper.Map<TRequest>(dbEntity);
+        var responseEntity = _mapper.Map<TDto>(dbEntity);
 
         if (dbEntity is null)
         {
@@ -68,32 +69,39 @@ where TRequest : EntityRequest
     }
 
     [HttpPost]
-    public async Task<IActionResult> UpsertAsync(TRequest request)
+    public async Task<IActionResult> UpsertAsync(TDto request)
     {
         await ValidateAsync(request);
 
         if (request.Id is 0)
         {
             var dbEntity = _mapper.Map<TModel>(request);
-            await _context.AddAsync(dbEntity);
 
-            var responseEntity = _mapper.Map<TRequest>(dbEntity);
+            await _context.AddAsync(dbEntity);
+            await _context.SaveChangesAsync();
+
+            var responseEntity = _mapper.Map<TDto>(dbEntity);
 
             return Ok(responseEntity);
         }
         else
         {
             var dbEntity = await _context.Set<TModel>().FindAsync(request.Id);
+
             if (dbEntity is null)
             {
                 return NotFound();
             }
+
             _mapper.Map(request, dbEntity);
 
-            var responseEntity = _mapper.Map<TRequest>(dbEntity);
+            await _context.SaveChangesAsync();
+
+            var responseEntity = _mapper.Map<TDto>(dbEntity);
 
             return Ok(responseEntity);
         }
+
 
     }
 }

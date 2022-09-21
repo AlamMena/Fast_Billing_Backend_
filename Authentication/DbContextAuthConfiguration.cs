@@ -1,15 +1,7 @@
 ﻿using API.DbModels.Contexts;
-using API.Dtos.Request;
-using Microsoft.AspNetCore.Http;
+using API.Dtos.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace API.Extensions
 {
@@ -19,7 +11,7 @@ namespace API.Extensions
         {
             services.AddScoped(options =>
             {
-                var config = options.GetService<IConfiguration>();
+                var config = options.GetRequiredService<IConfiguration>();
                 var localConnectionString = config.GetConnectionString("Local");
 
                 // configuring useful dbcontext
@@ -33,27 +25,23 @@ namespace API.Extensions
                     var userId = currentSession.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                     // initializing a new dbcontext without filter configurations to get the user in the db
-                    //using (var context = new FbContext(config!))
-                    //{
-                    //    var user = context?.Users.IgnoreQueryFilters()
-                    //                               .FirstOrDefault(u => u.IdUsuario == userId
-                    //                                                 && u.Estado == true
-                    //                                                 && u.Empresa.Estado == true
-                    //                                                 && u.Sucursal.Estado == true);
-                    //    tenantRequest.CompanyId = user?.EmpresaId;
-                    //    currentSucursalId = user?.SucursalId;
-                    //    currentUser = user?.IdUsuario;
-                    //    rolId = user?.RolId ?? 0;
+                    using var context = new FbContext();
+                    var user = context.Users.FirstOrDefault(d => d.FirebaseId == userId && d.IsDeleted == false);
+                    if (userId != null && user is null)
+                    {
+                        throw new UnauthorizedAccessException();
+                    }
+                    else if (user is not null)
+                    {
+                        tenantRequest.CompanyId = user.CompanyId;
+                        tenantRequest.BranchId = user.BranchId;
+                        tenantRequest.UserId = user.Id;
+                    }
+                };
 
-                    //    //if (user is null)
-                    //    //{
-                    //    //    throw new UnathorizeException("No se ha encontrado el usuario");
-                    //    //}
-                    //};
-
-                }
-                return new FbContext(tenantRequest);
+                return new FbContext(builder.Options, tenantRequest);
             });
+
         }
     }
 }
