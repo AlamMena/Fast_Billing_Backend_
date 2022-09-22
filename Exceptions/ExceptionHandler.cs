@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Net;
+using System.Text.Json;
 
 namespace API.Exceptions
 {
@@ -63,7 +64,7 @@ namespace API.Exceptions
                 // }
                 // else
                 // {
-                await BuildResponse(context, HttpStatusCode.InternalServerError, "Unhandler server error", error?.InnerException?.ToString()!);
+                await BuildResponse(context, HttpStatusCode.InternalServerError, error.ToString(), error?.InnerException?.ToString()!);
 
                 // // save log
                 // var contextDb = (POSContext)context.RequestServices.GetService(typeof(POSContext))!;

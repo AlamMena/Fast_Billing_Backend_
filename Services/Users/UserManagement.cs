@@ -25,9 +25,6 @@ namespace API.Services.Users
             var firebaseId = "";
             try
             {
-                // init db transaction
-                await _context.Database.BeginTransactionAsync();
-
                 // creating the user in firebase
                 var firebaseUser = await _firebaseInit.Auth.CreateUserAsync(new UserRecordArgs()
                 {
@@ -38,8 +35,6 @@ namespace API.Services.Users
                 });
 
                 firebaseId = firebaseUser.Uid;
-
-                _loggger.LogTrace("Firebase user created!");
 
                 // creating the user into the database
                 var dbUser = new User()
@@ -54,26 +49,16 @@ namespace API.Services.Users
                 await _context.AddAsync(dbUser);
                 await _context.SaveChangesAsync();
 
-                _loggger.LogTrace("Database user created!");
-
-                // commiting changes
-                await _context.Database.CommitTransactionAsync();
-
-                _loggger.LogTrace("'CreateUser' methdod successfully executed !");
-
                 return dbUser;
 
             }
             catch (FirebaseAuthException ex)
             {
-                _loggger.LogError("An error has occured with firebase");
-
                 if (ex.ErrorCode == FirebaseAdmin.ErrorCode.AlreadyExists)
                 {
                     throw new ValidationException("Email is not avaliable");
                 }
 
-                _loggger.LogError("An unhandler firebase error has ocurred");
                 throw;
             }
             catch (Exception)

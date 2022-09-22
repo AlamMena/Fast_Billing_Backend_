@@ -10,8 +10,9 @@ namespace API.DbModels.System.Branches
     public class Branch : CoreModel
     {
         public string Name { get; set; } = null!;
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; }
         public string? PostalCode { get; set; }
         public string Location { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
     }
 }

@@ -1,15 +1,10 @@
 ﻿using API.DbModels.Core;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace API.DbModels.Inventory.Brands
+namespace API.DbModels.Inventory.Categories
 {
-    [Table("Inv_Brands")]
-    public class Brand : TenantModel
+    [Table("Inv_SubCategories")]
+    public class SubCategory : TenantModel
     {
         public string Name { get; set; } = null!;
         public string? Description { get; set; }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj": {}
+    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj": {
+    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj",
+        "projectUniqueName": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\API.csproj",
+        "projectPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj",
         "packagesPath": "C:\\Users\\extamena\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\api\\obj\\",
+        "outputPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\extamena\\AppData\\Roaming\\NuGet\\NuGet.Config",

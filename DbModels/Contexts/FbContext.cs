@@ -91,7 +91,7 @@ namespace API.DbModels.Contexts
             modelBuilder.Entity<User>();
 
             // system 
-            modelBuilder.Entity<Company>().HasQueryFilter(d => d.Id == _tenantRequest.CompanyId);
+            modelBuilder.Entity<Company>();
             modelBuilder.Entity<Branch>();
 
             // inventory

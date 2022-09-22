@@ -1,4 +1,6 @@
 ﻿using API.DbModels.Core;
+using API.DbModels.System.Branches;
+using API.DbModels.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +15,15 @@ namespace API.DbModels.System.Companies
         public string NoIdentification { get; set; } = null!;
         public string? PostalCode { get; set; }
         public string Location { get; set; } = null!;
+
+        public virtual ICollection<User> Users { get; set; } = null!;
+        public virtual ICollection<Branch> Branches { get; set; } = null!;
+
+
+        public Company()
+        {
+            Users = new HashSet<User>();
+        }
+
     }
 }

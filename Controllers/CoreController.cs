@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Authorize]
-[Route("api/[controller]")]
+[Route("api/")]
 public class CoreController<TModel, TDto> : ControllerBase
 where TModel : CoreModel
 where TDto : CoreDto
@@ -31,8 +31,8 @@ where TDto : CoreDto
         return Ok();
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
+    [HttpGet("[controller]s")]
+    public virtual async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
     {
         var response = new PaginatedResponse<TDto>();
 
@@ -42,18 +42,13 @@ where TDto : CoreDto
              .ProjectTo<TDto>(_mapper.ConfigurationProvider)
              .ToListAsync();
 
-        if (!response.Data.Any())
-        {
-            return NoContent();
-        }
-
         response.DataQuantity = await _context.Set<TModel>().CountAsync();
 
         return Ok(response);
     }
 
-    [HttpGet("/{id}")]
-    public async Task<IActionResult> GetByIdAsync([FromQuery] int id)
+    [HttpGet("[controller]/{id}")]
+    public virtual async Task<IActionResult> GetByIdAsync( int id)
     {
         var dbEntity = await _context.Set<TModel>()
             .FirstOrDefaultAsync(d => d.Id == id);
@@ -68,8 +63,8 @@ where TDto : CoreDto
         return Ok(responseEntity);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UpsertAsync(TDto request)
+    [HttpPost("[controller]")]
+    public virtual async Task<IActionResult> UpsertAsync(TDto request)
     {
         await ValidateAsync(request);
 
@@ -82,7 +77,7 @@ where TDto : CoreDto
 
             var responseEntity = _mapper.Map<TDto>(dbEntity);
 
-            return Ok(responseEntity);
+            return Created("", responseEntity);
         }
         else
         {
@@ -101,7 +96,21 @@ where TDto : CoreDto
 
             return Ok(responseEntity);
         }
+    }
 
+    [HttpDelete("[controller]/{id}")]
+    public async Task<IActionResult> DeleteAsync(int id)
+    {
+        var entity = await _context.Set<TModel>().FindAsync(id);
+        if (entity is null)
+        {
+            return NotFound("resource not found");
+        }
 
+        entity.IsDeleted = true;
+
+        await _context.SaveChangesAsync();
+
+        return Ok();
     }
 }
