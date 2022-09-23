@@ -71,3 +71,4 @@ C:\Users\extamena\source\repos\Fast_Billing_Backend_Net\API\bin\Debug\net6.0\Goo
 C:\Users\extamena\source\repos\Fast_Billing_Backend_Net\API\bin\Debug\net6.0\Google.Apis.Auth.dll
 C:\Users\extamena\source\repos\Fast_Billing_Backend_Net\API\bin\Debug\net6.0\Google.Apis.Core.dll
 C:\Users\extamena\source\repos\Fast_Billing_Backend_Net\API\bin\Debug\net6.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\extamena\source\repos\Fast_Billing_Backend_Net\API\bin\Debug\net6.0\EFCore.NamingConventions.dll

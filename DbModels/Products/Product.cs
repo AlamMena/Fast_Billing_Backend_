@@ -1,9 +1,12 @@
-﻿using API.DbModels.Brands;
+﻿using API.DbModels.Contacts;
 using API.DbModels.Core;
+using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Products
 {
+    [Table("inventory_products")]
     public class Product : TenantModel
     {
         public string Name { get; set; } = null!;
@@ -22,7 +25,6 @@ namespace API.DbModels.Products
         public bool HasTax { get; set; }
         public decimal Tax { get; set; }
         public bool OnStock { get; set; }
-        public int? DocNum { get; set; }
         public int? BrandId { get; set; }
         public Brand? Brand { get; set; }
         public int? CategoryId { get; set; }
@@ -30,18 +32,18 @@ namespace API.DbModels.Products
         public int? SubCategoryId { get; set; }
         public SubCategory? SubCategory { get; set; }
         public int? ContactId { get; set; }
-        public ICollection<Contacts>? Contacts { get; set; }
+        public ICollection<Client>? Contacts { get; set; }
         //public ICollection<FacturaDetalle> FacturasDetalles { get; set; }
-        public ICollection<ProductoPrecio> Precios { get; set; }
-        public ICollection<ProductoImagen> Imagenes { get; set; }
-        public ICollection<ProductoCantidad> Cantidades { get; set; }
+        public ICollection<ProductPrice> Prices { get; set; }
+        public ICollection<ProductImage> Images { get; set; }
+        public ICollection<ProductStock> Stock { get; set; }
 
-        public Producto()
+        public Product()
         {
-            FacturasDetalles = new HashSet<FacturaDetalle>();
-            Imagenes = new HashSet<ProductoImagen>();
-            Precios = new HashSet<ProductoPrecio>();
-            Cantidades = new HashSet<ProductoCantidad>();
+            //FacturasDetalles = new HashSet<FacturaDetalle>();
+            Images = new HashSet<ProductImage>();
+            Prices = new HashSet<ProductPrice>();
+            Stock = new HashSet<ProductStock>();
 
         }
 

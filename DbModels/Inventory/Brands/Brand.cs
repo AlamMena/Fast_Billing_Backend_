@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace API.DbModels.Inventory.Brands
 {
-    [Table("Inv_Brands")]
+    [Table("inventory_brands")]
     public class Brand : TenantModel
     {
         public string Name { get; set; } = null!;

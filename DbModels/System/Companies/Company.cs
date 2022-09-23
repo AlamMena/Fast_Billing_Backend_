@@ -3,12 +3,14 @@ using API.DbModels.System.Branches;
 using API.DbModels.Users;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace API.DbModels.System.Companies
 {
+    [Table("system_companies")]
     public class Company : CoreModel
     {
         public string Name { get; set; } = null!;

@@ -44,6 +44,10 @@
               "target": "Package",
               "version": "[11.0.1, )"
             },
+            "EFCore.NamingConventions": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "FirebaseAdmin": {
               "target": "Package",
               "version": "[2.3.0, )"

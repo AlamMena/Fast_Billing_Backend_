@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Inventory.Categories
 {
-    [Table("Inv_SubCategories")]
+    [Table("inventory_subcategories")]
     public class SubCategory : TenantModel
     {
         public string Name { get; set; } = null!;

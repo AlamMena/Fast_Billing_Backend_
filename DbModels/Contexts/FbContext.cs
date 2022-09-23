@@ -6,6 +6,8 @@ using API.Dtos.Core;
 using Microsoft.EntityFrameworkCore;
 using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
+using API.DbModels.Products;
+using API.DbModels.Contacts;
 
 namespace API.DbModels.Contexts
 {
@@ -21,11 +23,28 @@ namespace API.DbModels.Contexts
         {
             _tenantRequest = tenantRequest;
         }
+        // system 
         public virtual DbSet<Company> Companies { get; set; } = null!;
         public virtual DbSet<Branch> Branches { get; set; } = null!;
+
+        // users
         public virtual DbSet<User> Users { get; set; } = null!;
+
+        // inventory
         public virtual DbSet<Brand> Brands { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
+
+        // prodcuts
+        public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
+        public virtual DbSet<ProductPrice> ProductPrices { get; set; } = null!;
+        public virtual DbSet<ProductStock> ProductStocks { get; set; } = null!;
+
+        // contacts
+        public virtual DbSet<Client> Clients { get; set; } = null!;
+        public virtual DbSet<ClientAddresses> ClientAddresses { get; set; } = null!;
+        public virtual DbSet<ClientCard> ClientCards { get; set; } = null!;
+        public virtual DbSet<ClientContacts> ClientContacts { get; set; } = null!;
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -36,7 +55,7 @@ namespace API.DbModels.Contexts
             }
         }
 
-        private void setTenantValue(CoreModel entity)
+        private void SetTenantValue(CoreModel entity)
         {
             var companyIdField = entity.GetType().GetProperty("CompanyId");
             var branchIdField = entity.GetType().GetProperty("branchId");
@@ -78,7 +97,7 @@ namespace API.DbModels.Contexts
                     entity.UpdatedDate = DateTime.Now;
                 }
 
-                setTenantValue(entity);
+                SetTenantValue(entity);
             }
             return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 
@@ -86,6 +105,8 @@ namespace API.DbModels.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // SetQueryFilters(modelBuilder);
+
+            SetPrecision(modelBuilder);
 
             // users 
             modelBuilder.Entity<User>();
@@ -97,14 +118,38 @@ namespace API.DbModels.Contexts
             // inventory
             modelBuilder.Entity<Brand>();
             modelBuilder.Entity<Category>();
+
+            //Products
+            modelBuilder.Entity<Product>();
+            modelBuilder.Entity<ProductImage>();
+            modelBuilder.Entity<ProductPrice>();
+            modelBuilder.Entity<ProductStock>();
+
+            // contacts 
+            modelBuilder.Entity<Client>();
+            modelBuilder.Entity<ClientAddresses>();
+            modelBuilder.Entity<ClientCard>();
+            modelBuilder.Entity<ClientContacts>();
+            modelBuilder.Entity<ClientType>();
+
         }
 
         public void SetTenant<T>(ModelBuilder modelBuilder) where T : class
         {
+
             modelBuilder.Entity<T>()
                 .HasQueryFilter(e => EF.Property<int>(e, "CompanyId") == _tenantRequest.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
         }
 
+        public static void SetPrecision(ModelBuilder modelBuilder)
+        {
+            foreach (var property in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+            {
+                property.SetColumnType("decimal(18,6)");
+            }
+        }
         public void SetQueryFilters(ModelBuilder modelBuilder)
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

@@ -14,6 +14,20 @@
           "lib/netstandard2.1/AutoMapper.dll": {}
         }
       },
+      "EFCore.NamingConventions/6.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "6.0.0",
+          "Microsoft.EntityFrameworkCore.Relational": "6.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/EFCore.NamingConventions.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/EFCore.NamingConventions.dll": {}
+        }
+      },
       "FirebaseAdmin/2.3.0": {
         "type": "package",
         "dependencies": {
@@ -846,6 +860,18 @@
         "icon.png",
         "lib/netstandard2.1/AutoMapper.dll",
         "lib/netstandard2.1/AutoMapper.xml"
+      ]
+    },
+    "EFCore.NamingConventions/6.0.0": {
+      "sha512": "ij0Z59hA3hattuY+FFmfGhJwLmSw8uz/+01lMRnD5YOYJM7hN7JJUZ92U3rZL6nTJQL5xOf7Rt39zdeNSloImw==",
+      "type": "package",
+      "path": "efcore.namingconventions/6.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "efcore.namingconventions.6.0.0.nupkg.sha512",
+        "efcore.namingconventions.nuspec",
+        "lib/net6.0/EFCore.NamingConventions.dll"
       ]
     },
     "FirebaseAdmin/2.3.0": {
@@ -2397,6 +2423,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "AutoMapper >= 11.0.1",
+      "EFCore.NamingConventions >= 6.0.0",
       "FirebaseAdmin >= 2.3.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.9",
       "Microsoft.EntityFrameworkCore >= 6.0.9",
@@ -2449,6 +2476,10 @@
           "AutoMapper": {
             "target": "Package",
             "version": "[11.0.1, )"
+          },
+          "EFCore.NamingConventions": {
+            "target": "Package",
+            "version": "[6.0.0, )"
           },
           "FirebaseAdmin": {
             "target": "Package",

@@ -22,6 +22,243 @@ namespace API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("API.DbModels.Contacts.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("AllowCredit")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowDisccount")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreditDays")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CreditLimit")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Disccount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("global_contacts");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.ContactAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Main")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("global_contacts_addresses");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.ContactCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CardName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExpirationDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastDigits")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("global_contacts_cards");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.ContactPhoneNumber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("global_contacts_phone_numbers");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.ContactType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("global_contacts_types");
+                });
+
             modelBuilder.Entity("API.DbModels.Inventory.Brands.Brand", b =>
                 {
                     b.Property<int>("Id")
@@ -45,6 +282,9 @@ namespace API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -67,7 +307,7 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Brands");
+                    b.ToTable("inventory_brands");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Categories.Category", b =>
@@ -93,6 +333,9 @@ namespace API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -115,7 +358,325 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("inventory_categories");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.Categories.SubCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("inventory_subcategories");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AbName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Anchor")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<string>("BarCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BuyUnity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Capacity")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HasTax")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Large")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OnStock")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Origin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<string>("SellUnity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<string>("UnityPrice")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("inventory_products");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("inventory_products_images");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.ProductPrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BuyUnity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("DetailQuantity")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MarginBenefit")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SellUnity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("inventory_products_prices");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.ProductStock", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Stock")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("inventory_products_stock");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Branches.Branch", b =>
@@ -166,7 +727,7 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Branches");
+                    b.ToTable("system_branches");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Companies.Company", b =>
@@ -209,7 +770,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.ToTable("system_companies");
                 });
 
             modelBuilder.Entity("API.DbModels.Users.User", b =>
@@ -231,6 +792,9 @@ namespace API.Migrations
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -262,7 +826,67 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Usr_User");
+                    b.ToTable("globals_users");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.Contact", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Products.Product", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("API.DbModels.Contacts.ContactType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.ContactAddress", b =>
+                {
+                    b.HasOne("API.DbModels.Contacts.Contact", "Contact")
+                        .WithMany("Addresses")
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.ContactCard", b =>
+                {
+                    b.HasOne("API.DbModels.Contacts.Contact", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.ContactPhoneNumber", b =>
+                {
+                    b.HasOne("API.DbModels.Contacts.Contact", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contact");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Brands.Brand", b =>
@@ -295,6 +919,107 @@ namespace API.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("API.DbModels.Inventory.Categories.SubCategory", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.Product", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.Inventory.Brands.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId");
+
+                    b.HasOne("API.DbModels.Inventory.Categories.Category", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Inventory.Categories.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.ProductImage", b =>
+                {
+                    b.HasOne("API.DbModels.Products.Product", null)
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.ProductPrice", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Products.Product", "Producto")
+                        .WithMany("Prices")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Producto");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.ProductStock", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Products.Product", "Producto")
+                        .WithMany("Stock")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("API.DbModels.System.Branches.Branch", b =>
                 {
                     b.HasOne("API.DbModels.System.Companies.Company", null)
@@ -315,6 +1040,22 @@ namespace API.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.Contact", b =>
+                {
+                    b.Navigation("Addresses");
+                });
+
+            modelBuilder.Entity("API.DbModels.Products.Product", b =>
+                {
+                    b.Navigation("Contacts");
+
+                    b.Navigation("Images");
+
+                    b.Navigation("Prices");
+
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Companies.Company", b =>

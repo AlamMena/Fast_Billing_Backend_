@@ -39,7 +39,6 @@ namespace API.Controllers
             var company = _mapper.Map<Company>(request);
 
             // adding a default branch to the company
-
             company.Branches.Add(new Branch()
             {
                 Name = "Principal",
@@ -72,9 +71,14 @@ namespace API.Controllers
                 return NotFound("Resource not found");
             }
 
+            // mapping values from the request to the company
             _mapper.Map(request, company);
 
+            // saving changes
             await _context.SaveChangesAsync();
+
+            // mapping result
+            _mapper.Map<CompanyDto>(company);
 
             return Ok();
         }

@@ -1,6 +1,8 @@
-﻿namespace API.DbModels.Contacts
+﻿using API.DbModels.Core;
+
+namespace API.DbModels.Suppliers
 {
-    public class ClientAddress
+    public class SupplierAddress : CoreModel
     {
         public string Name { get; set; } = null!;
         public string? PostalCode { get; set; }

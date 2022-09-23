@@ -10,6 +10,7 @@ namespace API.DbModels.Core
 {
     public class TenantModel : CoreModel
     {
+        public int DocNum { get; set; }
         public Company Company { get; set; } = null!;
         public int? CompanyId { get; set; }
         public Branch Branch { get; set; } = null!;

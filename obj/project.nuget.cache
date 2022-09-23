@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "0r2pA7JEm1MfHs4ohItTed5u6VexESTBNLotO+kWzLTccfBMV1wPDhgoKrcdAK4MPmyvQVLhIq7Q94G8sYttWA==",
+  "dgSpecHash": "I2ThYvWSIbTGMfjrRCxuobWPnaE3QWfu7alWocZD7Q8c7jBLwyB1tYe1mnYhLcoeN+URrK9Maj46hMRNMKLD+A==",
   "success": true,
   "projectFilePath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\extamena\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
+    "C:\\Users\\extamena\\.nuget\\packages\\efcore.namingconventions\\6.0.0\\efcore.namingconventions.6.0.0.nupkg.sha512",
     "C:\\Users\\extamena\\.nuget\\packages\\firebaseadmin\\2.3.0\\firebaseadmin.2.3.0.nupkg.sha512",
     "C:\\Users\\extamena\\.nuget\\packages\\google.api.gax\\3.2.0\\google.api.gax.3.2.0.nupkg.sha512",
     "C:\\Users\\extamena\\.nuget\\packages\\google.api.gax.rest\\3.2.0\\google.api.gax.rest.3.2.0.nupkg.sha512",

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace API.DbModels.Users
 {
-    [Table("Usr_User")]
+    [Table("globals_users")]
     public class User : TenantModel
     {
         public string FirebaseId { get; set; } = null!;
