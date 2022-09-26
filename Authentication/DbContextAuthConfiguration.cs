@@ -25,8 +25,8 @@ namespace API.Extensions
                     var userId = currentSession.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                     // initializing a new dbcontext without filter configurations to get the user in the db
-                    using var context = new FbContext();
-                    var user = context.Users.FirstOrDefault(d => d.FirebaseId == userId && d.IsDeleted == false);
+                    using var context = new FbContext(config);
+                    var user = context.Users.IgnoreQueryFilters().FirstOrDefault(d => d.FirebaseId == userId && d.IsDeleted == false);
                     if (userId != null && user is null)
                     {
                         throw new UnauthorizedAccessException();

@@ -102,7 +102,7 @@ namespace API.Controllers
 
 
 
-        [HttpGet("Company/{id}")]
+        [HttpGet("company/{id}")]
         public async Task<IActionResult> GetCompanyById(int id)
         {
             return Ok(await _context.Companies.FindAsync(id));

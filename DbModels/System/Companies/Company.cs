@@ -25,6 +25,7 @@ namespace API.DbModels.System.Companies
         public Company()
         {
             Users = new HashSet<User>();
+            Branches = new HashSet<Branch>();
         }
 
     }

@@ -2,10 +2,10 @@
 using API.DbModels.Core;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.DbModels.AccountReceivable
+namespace API.DbModels.AccountsReceivable
 {
     [Table("accounts_receivable_details")]
-    public class AccountReceivableTransactions : CoreModel
+    public class AccountReceivableTransaction : CoreModel
     {
         public decimal Amount { get; set; }
         public AccountSign Sign { get; set; }

@@ -7,69 +7,72 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[ApiController]
-[Authorize]
-[Route("api/")]
-public class CoreController<TModel, TDto> : ControllerBase
-where TModel : CoreModel
-where TDto : CoreDto
 
+namespace API.Controllers
 {
-    private readonly FbContext _context;
-    private readonly IMapper _mapper;
+    [ApiController]
+    [Authorize]
+    [Route("api/")]
+    public class CoreController<TModel, TDto> : ControllerBase
+        where TModel : CoreModel
+        where TDto : CoreDto
 
-    public CoreController(FbContext context, IMapper mapper)
     {
-        _context = context;
-        _mapper = mapper;
-    }
+        private readonly FbContext _context;
+        private readonly IMapper _mapper;
 
-    private async Task<IActionResult> ValidateAsync(TDto request)
-    {
-        await Task.CompletedTask;
-
-        return Ok();
-    }
-
-    [HttpGet("[controller]s")]
-    public virtual async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
-    {
-        var response = new PaginatedResponse<TDto>();
-
-        response.Data = await _context.Set<TModel>()
-             .Skip((page - 1) * limit)
-             .Take(limit)
-             .ProjectTo<TDto>(_mapper.ConfigurationProvider)
-             .ToListAsync();
-
-        response.DataQuantity = await _context.Set<TModel>().CountAsync();
-
-        return Ok(response);
-    }
-
-    [HttpGet("[controller]/{id}")]
-    public virtual async Task<IActionResult> GetByIdAsync( int id)
-    {
-        var dbEntity = await _context.Set<TModel>()
-            .FirstOrDefaultAsync(d => d.Id == id);
-
-        var responseEntity = _mapper.Map<TDto>(dbEntity);
-
-        if (dbEntity is null)
+        public CoreController(FbContext context, IMapper mapper)
         {
-            return NotFound();
+            _context = context;
+            _mapper = mapper;
         }
 
-        return Ok(responseEntity);
-    }
-
-    [HttpPost("[controller]")]
-    public virtual async Task<IActionResult> UpsertAsync(TDto request)
-    {
-        await ValidateAsync(request);
-
-        if (request.Id is 0)
+        [NonAction]
+        public virtual async Task<bool> ValidateAsync(TDto request)
         {
+            await Task.CompletedTask;
+
+            return true;
+        }
+
+        [HttpGet("[controller]s")]
+        public virtual async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
+        {
+            var response = new PaginatedResponse<TDto>
+            {
+                Data = await _context.Set<TModel>()
+                 .Skip((page - 1) * limit)
+                 .Take(limit)
+                 .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                 .ToListAsync(),
+
+                DataQuantity = await _context.Set<TModel>().CountAsync()
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("[controller]/{id}")]
+        public virtual async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var dbEntity = await _context.Set<TModel>()
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            var responseEntity = _mapper.Map<TDto>(dbEntity);
+
+            if (dbEntity is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(responseEntity);
+        }
+
+        [HttpPost("[controller]")]
+        public virtual async Task<IActionResult> PostAsync(TDto request)
+        {
+            await ValidateAsync(request);
+
             var dbEntity = _mapper.Map<TModel>(request);
 
             await _context.AddAsync(dbEntity);
@@ -78,8 +81,10 @@ where TDto : CoreDto
             var responseEntity = _mapper.Map<TDto>(dbEntity);
 
             return Created("", responseEntity);
+
         }
-        else
+        [HttpPut]
+        public virtual async Task<IActionResult> PutAsync(TDto request)
         {
             var dbEntity = await _context.Set<TModel>().FindAsync(request.Id);
 
@@ -96,21 +101,22 @@ where TDto : CoreDto
 
             return Ok(responseEntity);
         }
-    }
 
-    [HttpDelete("[controller]/{id}")]
-    public async Task<IActionResult> DeleteAsync(int id)
-    {
-        var entity = await _context.Set<TModel>().FindAsync(id);
-        if (entity is null)
+        [HttpDelete("[controller]/{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return NotFound("resource not found");
+            var entity = await _context.Set<TModel>().FindAsync(id);
+            if (entity is null)
+            {
+                return NotFound("resource not found");
+            }
+
+            entity.IsDeleted = true;
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
-
-        entity.IsDeleted = true;
-
-        await _context.SaveChangesAsync();
-
-        return Ok();
     }
 }
+

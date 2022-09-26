@@ -2,7 +2,7 @@
 using API.DbModels.Core;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.DbModels.AccountReceivable
+namespace API.DbModels.AccountsReceivable
 {
     [Table("accounts_recivable")]
     public class AccountReceivable : TenantModel
@@ -21,12 +21,12 @@ namespace API.DbModels.AccountReceivable
         public int Reference { get; set; }
         public int? ReferenceId { get; set; }
         public bool Confirmed { get; set; }
-        public ICollection<AccountReceivableTransactions> Transactions { get; set; }
+        public ICollection<AccountReceivableTransaction> Transactions { get; set; }
         //public ICollection<ReciboDetalle> ReciboDetalles { get; set; }
 
         public AccountReceivable()
         {
-            Transactions = new HashSet<AccountReceivableTransactions>();
+            Transactions = new HashSet<AccountReceivableTransaction>();
             //ReciboDetalles = new HashSet<ReciboDetalle>();
         }
     }

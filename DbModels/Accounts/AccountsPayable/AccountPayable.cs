@@ -30,11 +30,11 @@ namespace API.DbModels.Accounts.AccountsPayable
         public decimal TaxAmount { get; set; }
         public decimal Total { get; set; }
         public decimal Balance { get; set; }
-        public ICollection<AccountPayable> Transactions { get; set; }
+        public ICollection<AccountPaybleTransaction> Transactions { get; set; }
 
         public AccountPayable()
         {
-            Transactions = new HashSet<AccountPayable>();
+            Transactions = new HashSet<AccountPaybleTransaction>();
         }
     }
 }

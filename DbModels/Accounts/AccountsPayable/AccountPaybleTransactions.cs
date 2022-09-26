@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace API.DbModels.Accounts.AccountsPayable
 {
     [Table("accounts_payable_transactions")]
-    public class AccountPaybleTransactions : CoreModel
+    public class AccountPaybleTransaction : CoreModel
     {
         public DateTime Date { get; set; }
         public decimal DisccountAmount { get; set; }

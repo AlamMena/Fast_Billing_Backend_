@@ -23,7 +23,7 @@ public class UsersController : ControllerBase
         _mapper = mapper;
     }
     [AllowAnonymous]
-    [HttpPost("GetToken")]
+    [HttpPost("token")]
     public async Task<IActionResult> GetToken(string mail, string password)
     {
         HttpClient client = new();
@@ -45,7 +45,7 @@ public class UsersController : ControllerBase
     {
         var user = await _userManagement.CreateUserAsync(request);
 
-        var userResponse = _mapper.Map<UserDto>(request);
+        var userResponse = _mapper.Map<UserDto>(user);
 
         return Ok(userResponse);
 

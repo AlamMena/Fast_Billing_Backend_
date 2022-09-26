@@ -10,9 +10,9 @@ namespace API.DbModels.Products
         public decimal Cost { get; set; }
         public decimal Price { get; set; }
         public decimal MarginBenefit { get; set; }
-        public string? BuyUnity { get; set; } = null!;
-        public decimal? DetailQuantity { get; set; }
-        public string? SellUnity { get; set; }
+        //public string? BuyUnity { get; set; } = null!;
+        //public decimal? DetailQuantity { get; set; }
+        //public string? SellUnity { get; set; }
 
         public int ProductId { get; set; }
         public virtual Product Producto { get; set; } = null!;

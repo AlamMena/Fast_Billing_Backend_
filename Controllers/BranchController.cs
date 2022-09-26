@@ -1,4 +1,5 @@
-﻿using API.DbModels.Contexts;
+﻿
+using API.DbModels.Contexts;
 using API.DbModels.System.Branches;
 using API.Dtos.System.Branches;
 using AutoMapper;
@@ -16,7 +17,7 @@ namespace API.Controllers
         {
         }
 
-        [HttpGet("Branches")]
+        [HttpGet("branches")]
         public override async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
         {
             return await base.GetAllAsync(page, limit);

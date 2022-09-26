@@ -22,7 +22,288 @@ namespace API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("API.DbModels.Contacts.Contact", b =>
+            modelBuilder.Entity("API.DbModels.Accounts.AccountsPayable.AccountPayable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DisccountAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Ncf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NcfTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Reference")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("SupplierDocNum")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierNoIdentification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierReceipt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("NcfTypeId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("accounts_payable");
+                });
+
+            modelBuilder.Entity("API.DbModels.Accounts.AccountsPayable.AccountPaybleTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccountPayableId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("DisccountAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RefNo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sign")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountPayableId");
+
+                    b.ToTable("accounts_payable_transactions");
+                });
+
+            modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivable", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ClientDocNum")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InitialDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Reference")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReferenceId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("accounts_recivable");
+                });
+
+            modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivableTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccounReceivabletId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Reference")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sign")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("accounts_receivable_details");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,8 +341,18 @@ namespace API.Migrations
                     b.Property<int>("DocNum")
                         .HasColumnType("int");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoIdentification")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProductId")
                         .HasColumnType("int");
@@ -85,10 +376,10 @@ namespace API.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("global_contacts");
+                    b.ToTable("sales_clients");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ContactAddress", b =>
+            modelBuilder.Entity("API.DbModels.Contacts.ClientAddresses", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,7 +387,7 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ContactId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("Country")
@@ -133,12 +424,12 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ClientId");
 
-                    b.ToTable("global_contacts_addresses");
+                    b.ToTable("sales_clients_addresses");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ContactCard", b =>
+            modelBuilder.Entity("API.DbModels.Contacts.ClientCard", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,7 +441,7 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ContactId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("CreatedBy")
@@ -178,12 +469,12 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ClientId");
 
-                    b.ToTable("global_contacts_cards");
+                    b.ToTable("sales_clients_cards");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ContactPhoneNumber", b =>
+            modelBuilder.Entity("API.DbModels.Contacts.ClientContacts", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -191,7 +482,7 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ContactId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("CreatedBy")
@@ -219,12 +510,12 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ClientId");
 
-                    b.ToTable("global_contacts_phone_numbers");
+                    b.ToTable("sales_clients_contacts");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ContactType", b =>
+            modelBuilder.Entity("API.DbModels.Contacts.ClientType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -256,7 +547,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("global_contacts_types");
+                    b.ToTable("sales_clients_types");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Brands.Brand", b =>
@@ -361,7 +652,43 @@ namespace API.Migrations
                     b.ToTable("inventory_categories");
                 });
 
-            modelBuilder.Entity("API.DbModels.Inventory.Categories.SubCategory", b =>
+            modelBuilder.Entity("API.DbModels.Inventory.Currencies.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("system_currency");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.SubCategories.SubCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -370,6 +697,9 @@ namespace API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<int?>("CompanyId")
@@ -407,9 +737,323 @@ namespace API.Migrations
 
                     b.HasIndex("BranchId");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("CompanyId");
 
                     b.ToTable("inventory_subcategories");
+                });
+
+            modelBuilder.Entity("API.DbModels.Invoices.Invoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("AccountAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientCardExpirationDate")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClientCardId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientCardNo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientNoIdentification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CreditDates")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Disccount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ExcentTax")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int?>("InvoiceNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InvoiceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InvoiceTypeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Ncf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NcfDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NcfExpiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NcfName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NcfTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Return")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("SaveAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("TotalGrab")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("TotalPayed")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<bool>("Updated")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("WithTax")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ClientCardId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("InvoiceTypeId");
+
+                    b.HasIndex("NcfTypeId");
+
+                    b.ToTable("sales_invoices");
+                });
+
+            modelBuilder.Entity("API.DbModels.Invoices.InvoiceDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Avarage")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Comision")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Disccount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("DisscountAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<bool>("Excent")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Offert")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("OriginalPrice")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<bool>("Pending")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<string>("SellUnity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("sales_invoices_details");
+                });
+
+            modelBuilder.Entity("API.DbModels.Invoices.InvoiceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("sales_invoices_types");
+                });
+
+            modelBuilder.Entity("API.DbModels.Ncf.NcfType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prefix")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NcfTypes");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
@@ -679,6 +1323,77 @@ namespace API.Migrations
                     b.ToTable("inventory_products_stock");
                 });
 
+            modelBuilder.Entity("API.DbModels.Suppliers.Supplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18,6)");
+
+                    b.Property<int?>("Dias")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NCFTipoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoIdentification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WebSite")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CurrencyId");
+
+                    b.ToTable("inventory_supplier");
+                });
+
             modelBuilder.Entity("API.DbModels.System.Branches.Branch", b =>
                 {
                     b.Property<int>("Id")
@@ -829,7 +1544,81 @@ namespace API.Migrations
                     b.ToTable("globals_users");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.Contact", b =>
+            modelBuilder.Entity("API.DbModels.Accounts.AccountsPayable.AccountPayable", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Ncf.NcfType", "NcfType")
+                        .WithMany()
+                        .HasForeignKey("NcfTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.Suppliers.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("NcfType");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("API.DbModels.Accounts.AccountsPayable.AccountPaybleTransaction", b =>
+                {
+                    b.HasOne("API.DbModels.Accounts.AccountsPayable.AccountPayable", "AccountPayable")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AccountPayableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountPayable");
+                });
+
+            modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivable", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.Contacts.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivableTransaction", b =>
+                {
+                    b.HasOne("API.DbModels.AccountsReceivable.AccountReceivable", "Account")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.Client", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
@@ -843,7 +1632,7 @@ namespace API.Migrations
                         .WithMany("Contacts")
                         .HasForeignKey("ProductId");
 
-                    b.HasOne("API.DbModels.Contacts.ContactType", "Type")
+                    b.HasOne("API.DbModels.Contacts.ClientType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -856,37 +1645,37 @@ namespace API.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ContactAddress", b =>
+            modelBuilder.Entity("API.DbModels.Contacts.ClientAddresses", b =>
                 {
-                    b.HasOne("API.DbModels.Contacts.Contact", "Contact")
+                    b.HasOne("API.DbModels.Contacts.Client", "Client")
                         .WithMany("Addresses")
-                        .HasForeignKey("ContactId")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contact");
+                    b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ContactCard", b =>
+            modelBuilder.Entity("API.DbModels.Contacts.ClientCard", b =>
                 {
-                    b.HasOne("API.DbModels.Contacts.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
+                    b.HasOne("API.DbModels.Contacts.Client", "Client")
+                        .WithMany("Cards")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contact");
+                    b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ContactPhoneNumber", b =>
+            modelBuilder.Entity("API.DbModels.Contacts.ClientContacts", b =>
                 {
-                    b.HasOne("API.DbModels.Contacts.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
+                    b.HasOne("API.DbModels.Contacts.Client", "Client")
+                        .WithMany("Contacts")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contact");
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Brands.Brand", b =>
@@ -919,11 +1708,17 @@ namespace API.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("API.DbModels.Inventory.Categories.SubCategory", b =>
+            modelBuilder.Entity("API.DbModels.Inventory.SubCategories.SubCategory", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
                         .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.Inventory.Categories.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
@@ -931,7 +1726,73 @@ namespace API.Migrations
 
                     b.Navigation("Branch");
 
+                    b.Navigation("Category");
+
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("API.DbModels.Invoices.Invoice", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.Contacts.ClientCard", "ClientCard")
+                        .WithMany()
+                        .HasForeignKey("ClientCardId");
+
+                    b.HasOne("API.DbModels.Contacts.Client", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Invoices.InvoiceType", "Type")
+                        .WithMany()
+                        .HasForeignKey("InvoiceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.Ncf.NcfType", "NcfType")
+                        .WithMany()
+                        .HasForeignKey("NcfTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("ClientCard");
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("NcfType");
+
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("API.DbModels.Invoices.InvoiceDetail", b =>
+                {
+                    b.HasOne("API.DbModels.Invoices.Invoice", "Invoice")
+                        .WithMany("Details")
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
@@ -952,7 +1813,7 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("API.DbModels.Inventory.Categories.SubCategory", "SubCategory")
+                    b.HasOne("API.DbModels.Inventory.SubCategories.SubCategory", "SubCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId");
 
@@ -1020,6 +1881,29 @@ namespace API.Migrations
                     b.Navigation("Producto");
                 });
 
+            modelBuilder.Entity("API.DbModels.Suppliers.Supplier", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Inventory.Currencies.Currency", "Currency")
+                        .WithMany()
+                        .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Currency");
+                });
+
             modelBuilder.Entity("API.DbModels.System.Branches.Branch", b =>
                 {
                     b.HasOne("API.DbModels.System.Companies.Company", null)
@@ -1042,9 +1926,28 @@ namespace API.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.Contact", b =>
+            modelBuilder.Entity("API.DbModels.Accounts.AccountsPayable.AccountPayable", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivable", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("API.DbModels.Contacts.Client", b =>
                 {
                     b.Navigation("Addresses");
+
+                    b.Navigation("Cards");
+
+                    b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("API.DbModels.Invoices.Invoice", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>

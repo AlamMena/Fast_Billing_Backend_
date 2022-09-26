@@ -2,6 +2,7 @@
 using API.DbModels.Core;
 using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
+using API.DbModels.Inventory.SubCategories;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Products
@@ -31,7 +32,6 @@ namespace API.DbModels.Products
         public Category? Categoria { get; set; }
         public int? SubCategoryId { get; set; }
         public SubCategory? SubCategory { get; set; }
-        public int? ContactId { get; set; }
         public ICollection<Client>? Contacts { get; set; }
         //public ICollection<FacturaDetalle> FacturasDetalles { get; set; }
         public ICollection<ProductPrice> Prices { get; set; }

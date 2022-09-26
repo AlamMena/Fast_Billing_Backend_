@@ -8,6 +8,11 @@ using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
 using API.DbModels.Products;
 using API.DbModels.Contacts;
+using API.DbModels.Invoices;
+using API.DbModels.Accounts.AccountsPayable;
+using API.DbModels.AccountsReceivable;
+using API.DbModels.Ncf;
+using API.DbModels.Inventory.SubCategories;
 
 namespace API.DbModels.Contexts
 {
@@ -18,40 +23,61 @@ namespace API.DbModels.Contexts
 
         public FbContext() { }
 
+        public FbContext(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public FbContext(DbContextOptions<FbContext> options, TenantRequest tenantRequest)
                 : base(options)
         {
             _tenantRequest = tenantRequest;
         }
-        // system 
+        // ----- system ----- 
         public virtual DbSet<Company> Companies { get; set; } = null!;
         public virtual DbSet<Branch> Branches { get; set; } = null!;
 
-        // users
+        // ----- users -----
         public virtual DbSet<User> Users { get; set; } = null!;
 
-        // inventory
+        // ----- inventory -----
         public virtual DbSet<Brand> Brands { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
-
-        // prodcuts
+        public virtual DbSet<SubCategory> SubCategories { get; set; } = null!;
+        // ----- prodcuts -----
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
         public virtual DbSet<ProductPrice> ProductPrices { get; set; } = null!;
         public virtual DbSet<ProductStock> ProductStocks { get; set; } = null!;
 
-        // contacts
+        // ----- contacts -----
         public virtual DbSet<Client> Clients { get; set; } = null!;
         public virtual DbSet<ClientAddresses> ClientAddresses { get; set; } = null!;
         public virtual DbSet<ClientCard> ClientCards { get; set; } = null!;
         public virtual DbSet<ClientContacts> ClientContacts { get; set; } = null!;
+
+        // ----- invoices -----
+        public virtual DbSet<Invoice> Invoices { get; set; } = null!;
+        public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; } = null!;
+
+        // ---- accounts -----
+
+        // ----- accounts receivable -----
+        public virtual DbSet<AccountReceivable> AccountsReceivable { get; set; } = null!;
+        public virtual DbSet<AccountReceivableTransaction> AccountReceivableTransactions { get; set; } = null!;
+
+        // ----- accounts payable -----
+        public virtual DbSet<AccountPayable> AccountsPayable { get; set; } = null!;
+        public virtual DbSet<AccountPaybleTransaction> AccountsPaybleTransactions { get; set; } = null!;
+
+        // ----- ncf ------
+        public virtual DbSet<NcfType> NcfTypes { get; set; } = null!;
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB; trusted_connection=true;");
+                optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB;trusted_connection=true;");
             }
         }
 
@@ -104,7 +130,7 @@ namespace API.DbModels.Contexts
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // SetQueryFilters(modelBuilder);
+            SetQueryFilters(modelBuilder);
 
             SetPrecision(modelBuilder);
 
@@ -137,8 +163,17 @@ namespace API.DbModels.Contexts
         public void SetTenant<T>(ModelBuilder modelBuilder) where T : class
         {
 
-            modelBuilder.Entity<T>()
-                .HasQueryFilter(e => EF.Property<int>(e, "CompanyId") == _tenantRequest.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
+            if (typeof(T) == typeof(Company))
+            {
+                modelBuilder.Entity<T>()
+                            .HasQueryFilter(e => EF.Property<int>(e, "Id") == _tenantRequest.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
+            }
+            else
+            {
+                modelBuilder.Entity<T>()
+                            .HasQueryFilter(e => EF.Property<int>(e, "CompanyId") == _tenantRequest.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
+
+            }
         }
 
         public static void SetPrecision(ModelBuilder modelBuilder)
@@ -154,7 +189,7 @@ namespace API.DbModels.Contexts
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (!typeof(CoreModel).IsAssignableFrom(entityType.ClrType))
+                if (!typeof(TenantModel).IsAssignableFrom(entityType.ClrType))
                 {
                     continue;
                 }

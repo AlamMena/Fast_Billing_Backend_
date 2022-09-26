@@ -23,8 +23,6 @@ builder.Services.AddJwtAuthentication();
 builder.Services.AddSingleton<FirebaseInit>();
 builder.Services.AddHttpContextAccessor();
 
-
-
 // db services
 builder.Services.AddScoped<IUserManagement, UserManagement>();
 

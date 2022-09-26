@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj": {}
+    "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj": {
+    "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj",
+        "projectUniqueName": "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\API.csproj",
         "projectName": "API",
-        "projectPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\API.csproj",
+        "projectPath": "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\API.csproj",
         "packagesPath": "C:\\Users\\extamena\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\extamena\\source\\repos\\Fast_Billing_Backend_Net\\API\\obj\\",
+        "outputPath": "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\extamena\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -73,6 +73,10 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.9, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[6.0.9, )"
             },
