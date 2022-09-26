@@ -1,5 +1,5 @@
-﻿using API.DbModels.Accounts.Core;
-using API.DbModels.Core;
+﻿using API.DbModels.Core;
+using API.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.AccountsReceivable
@@ -8,7 +8,7 @@ namespace API.DbModels.AccountsReceivable
     public class AccountReceivableTransaction : CoreModel
     {
         public decimal Amount { get; set; }
-        public AccountSign Sign { get; set; }
+        public TransactionType Sign { get; set; }
         public string Document { get; set; } = null!;
         public int AccounReceivabletId { get; set; }
         public AccountReceivable Account { get; set; } = null!;

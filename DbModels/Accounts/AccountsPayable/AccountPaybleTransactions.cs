@@ -1,5 +1,5 @@
-﻿using API.DbModels.Accounts.Core;
-using API.DbModels.Core;
+﻿using API.DbModels.Core;
+using API.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Accounts.AccountsPayable
@@ -10,7 +10,7 @@ namespace API.DbModels.Accounts.AccountsPayable
         public DateTime Date { get; set; }
         public decimal DisccountAmount { get; set; }
         public decimal Amount { get; set; }
-        public AccountSign Sign { get; set; }
+        public TransactionType Sign { get; set; }
         public int AccountPayableId { get; set; }
         public AccountPayable AccountPayable { get; set; } = null!;
         public string Document { get; set; } = null!;
