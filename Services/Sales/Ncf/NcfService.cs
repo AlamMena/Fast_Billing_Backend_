@@ -16,7 +16,7 @@ namespace API.Services.Sales.Ncf
             _context = context;
         }
 
-        public record NcfResponse(string Ncf, DateOnly ExpirationDate);
+        public record NcfResponse(string Ncf, DateTime ExpirationDate);
         public async Task<NcfResponse> GetNcfAsync(int type)
         {
 
@@ -65,7 +65,7 @@ namespace API.Services.Sales.Ncf
                 .ExecuteSqlRawAsync($"sp_get_ncf_sequence @type,@company,@branch,@ncf OUTPUT,@expirationDate OUTPUT", parameters);
 
             var ncf = (string)parameters[3].Value ?? throw new ValidationException("There is not ncf avaliable");
-            var expirationDate = (DateOnly)parameters[4].Value;
+            var expirationDate = (DateTime)parameters[4].Value;
 
             return new NcfResponse(ncf, expirationDate);
 

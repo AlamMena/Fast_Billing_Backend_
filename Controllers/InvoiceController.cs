@@ -50,6 +50,19 @@ namespace API.Controllers
                 }
             }
 
+            var productsAreRepeated = request.Details.GroupBy(d => d.ProductId).Any(d => d.Count() > 1);
+            if (productsAreRepeated)
+            {
+                throw new ValidationException("Details repeated");
+            }
+            var productsIds = request.Details.Select(d => d.ProductId);
+            var productsAreValid = !await _context.Products.Select(d => d.Id).Except(productsIds).AnyAsync();
+
+            if (!productsAreValid)
+            {
+                throw new ValidationException("Products are not valid");
+            }
+
             return true;
         }
 
@@ -63,19 +76,25 @@ namespace API.Controllers
 
             var invoice = _mapper.Map<Invoice>(request);
 
+
+            // getting invoice type name
             invoice.InvoiceTypeName = await _context.NcfTypes
                 .Where(d => d.Id == request.NcfTypeId)
                 .Select(d => d.Name)
                 .FirstAsync();
 
+            // ncf configuration
             var ncfResponse = await _ncfService.GetNcfAsync(request.InvoiceTypeId);
             invoice.Ncf = ncfResponse.Ncf;
             invoice.NcfExpiration = ncfResponse.ExpirationDate;
 
-            // var result = await _ncfService.GetNcfAsync(type);
-
+            // commiting changes
+            await _context.AddAsync(invoice);
             await _context.SaveChangesAsync();
+
+            _mapper.Map<InvoiceDto>(invoice);
             await _context.Database.CommitTransactionAsync();
+
 
             return Ok();
         }

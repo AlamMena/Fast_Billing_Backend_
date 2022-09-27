@@ -15,6 +15,6 @@ namespace API.DbModels.Ncf
         public int SequenceSince { get; set; }
         public int SequenceUntil { get; set; }
         public int Alert { get; set; }
-        public DateTime? ExiprationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
     }
 }

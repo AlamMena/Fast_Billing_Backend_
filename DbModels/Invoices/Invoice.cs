@@ -16,9 +16,9 @@ namespace API.DbModels.Invoices
         public NcfType NcfType { get; set; } = null!;
         public string? NcfName { get; set; }
         public string Ncf { get; set; } = null!;
-        public DateOnly? NcfExpiration { get; set; }
-        public DateOnly NcfDate { get; set; }
-        public DateOnly Date { get; set; }
+        public DateTime? NcfExpiration { get; set; }
+        public DateTime NcfDate { get; set; }
+        public DateTime Date { get; set; }
         public int CreditDates { get; set; }
         public int ClientId { get; set; }
         public Client Cliente { get; set; } = null!;
