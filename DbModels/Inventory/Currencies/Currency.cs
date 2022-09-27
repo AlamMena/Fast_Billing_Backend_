@@ -7,6 +7,6 @@ namespace API.DbModels.Inventory.Currencies
     public class Currency : CoreModel
     {
         public string Name { get; set; } = null!;
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }

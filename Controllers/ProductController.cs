@@ -29,10 +29,17 @@ namespace API.Controllers
             {
                 throw new ValidationException("The product name is not avaliable");
             }
+
             var barCodeExists = await _context.Products.AnyAsync(d => d.Id != request.Id && d.BarCode == request.BarCode);
             if (barCodeExists)
             {
                 throw new ValidationException("The bar code is not avaliable");
+            }
+
+            var wareHouseExists = await _context.Warehouses.AnyAsync(d => d.Id == request.WarehouseId);
+            if (!wareHouseExists)
+            {
+                throw new ValidationException("The warehouse is not valid");
             }
 
             var categoryExist = await _context.Categories.AnyAsync(d => d.Id == request.CategoryId);
@@ -56,7 +63,7 @@ namespace API.Controllers
             return true;
         }
 
-        [HttpPost]
+        [HttpPost("product")]
         public override async Task<IActionResult> PostAsync(ProductDto request)
         {
             await _context.Database.BeginTransactionAsync();
@@ -65,15 +72,17 @@ namespace API.Controllers
 
             var product = _mapper.Map<Product>(request);
 
+            // adding initial price
             product.Prices.Add(new ProductPrice
             {
                 Cost = request.Cost,
                 Price = request.Price,
-                MarginBenefit = request.MarginBenefit
+                MarginBenefit = 100 * (request.Price - request.Cost) / request.Cost,
 
             });
 
-            product.Stock.Add(new ProductStock
+            // adding initial stock
+            product.Stocks.Add(new ProductStock
             {
                 WarehouseId = request.WarehouseId,
                 Stock = request.Stock,
@@ -82,7 +91,8 @@ namespace API.Controllers
             await _context.AddAsync(product);
             await _context.SaveChangesAsync();
 
-            await _context.AddAsync(new InventoryTransaction()
+            // generating the initial transaction
+            await _context.AddAsync(new ProductTransaction()
             {
                 WarehouseId = request.WarehouseId,
                 ProductId = product.Id,
@@ -95,13 +105,16 @@ namespace API.Controllers
                 NewCost = request.Cost,
                 Note = "Initial transaction",
                 Document = "IT",
-                ExpirationDate = null
+                ExpirationDate = null,
+                CompanyId = _context._tenantRequest.CompanyId,
+                BranchId = _context._tenantRequest.BranchId,
             });
 
             await _context.SaveChangesAsync();
             await _context.Database.CommitTransactionAsync();
 
-            return Created("", product);
+            var response = _mapper.Map<ProductDto>(product);
+            return Created("", response);
         }
     }
 }

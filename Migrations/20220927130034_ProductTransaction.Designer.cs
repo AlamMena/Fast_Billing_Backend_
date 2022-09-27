@@ -4,6 +4,7 @@ using API.DbModels.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(FbContext))]
-    partial class FbContextModelSnapshot : ModelSnapshot
+    [Migration("20220927130034_ProductTransaction")]
+    partial class ProductTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1152,74 +1154,6 @@ namespace API.Migrations
                     b.ToTable("sales_invoices_types");
                 });
 
-            modelBuilder.Entity("API.DbModels.Ncf.NcfSequence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Alert")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DocNum")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ExiprationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LastNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NCFTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Prefix")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SequenceSince")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SequenceUntil")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("NCFTypeId");
-
-                    b.ToTable("sales_ncf_sequences");
-                });
-
             modelBuilder.Entity("API.DbModels.Ncf.NcfType", b =>
                 {
                     b.Property<int>("Id")
@@ -1257,7 +1191,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("sales_ncf_types");
+                    b.ToTable("NcfTypes");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
@@ -2038,29 +1972,6 @@ namespace API.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("API.DbModels.Ncf.NcfSequence", b =>
-                {
-                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId");
-
-                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.HasOne("API.DbModels.Ncf.NcfType", "NCFType")
-                        .WithMany()
-                        .HasForeignKey("NCFTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Company");
-
-                    b.Navigation("NCFType");
-                });
-
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
@@ -2135,7 +2046,7 @@ namespace API.Migrations
                         .HasForeignKey("CompanyId");
 
                     b.HasOne("API.DbModels.Products.Product", "Producto")
-                        .WithMany("Stocks")
+                        .WithMany("Stock")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2232,7 +2143,7 @@ namespace API.Migrations
 
                     b.Navigation("Prices");
 
-                    b.Navigation("Stocks");
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Companies.Company", b =>

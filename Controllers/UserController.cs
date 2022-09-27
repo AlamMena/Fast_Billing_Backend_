@@ -36,7 +36,32 @@ public class UsersController : ControllerBase
 
         var result = response.Content.ReadAsStringAsync().Result;
 
+
+
+
         return Ok(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPost("testncf")]
+    public async Task<IActionResult> TestNCF()
+    {
+        HttpClient client = new();
+        var usuario = JsonConvert.SerializeObject(new { });
+        var Url = $"https://localhost:7068/api/invoice?type=4&error=1";
+        var data = new StringContent(usuario, Encoding.UTF8, "application/json");
+
+        var value = 0;
+
+        while (value < 5)
+        {
+            client.PostAsync(Url, data);
+            value++;
+        }
+        // var response = await client.PostAsync(Url, data);
+        // var result = await response.Content.ReadAsStringAsync();
+
+        return Ok();
     }
 
 

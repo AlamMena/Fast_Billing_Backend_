@@ -3,6 +3,7 @@ using API.Exceptions;
 using API.Extensions;
 using API.Mappers;
 using API.Services.Firebase;
+using API.Services.Sales.Ncf;
 using API.Services.Users;
 using API.Swagger;
 using Microsoft.OpenApi.Models;
@@ -25,11 +26,15 @@ builder.Services.AddHttpContextAccessor();
 
 // db services
 builder.Services.AddScoped<IUserManagement, UserManagement>();
+builder.Services.AddScoped<INcfService, NcfService>();
+
 
 // lib services
 builder.Services.AddAutoMapper();
 builder.Services.AddSwagger();
 builder.Services.AddLogging();
+
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
 // cors
 builder.Services.AddCors(options =>
@@ -45,6 +50,7 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

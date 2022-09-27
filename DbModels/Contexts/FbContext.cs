@@ -13,12 +13,14 @@ using API.DbModels.Accounts.AccountsPayable;
 using API.DbModels.AccountsReceivable;
 using API.DbModels.Ncf;
 using API.DbModels.Inventory.SubCategories;
+using API.DbModels.Inventory.Warehouses;
+using API.DbModels.Inventory.Core;
 
 namespace API.DbModels.Contexts
 {
     public class FbContext : DbContext
     {
-        private readonly TenantRequest _tenantRequest = null!;
+        public readonly TenantRequest _tenantRequest = null!;
         private readonly IConfiguration _configuration = null!;
 
         public FbContext() { }
@@ -48,6 +50,7 @@ namespace API.DbModels.Contexts
         public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
         public virtual DbSet<ProductPrice> ProductPrices { get; set; } = null!;
         public virtual DbSet<ProductStock> ProductStocks { get; set; } = null!;
+        public virtual DbSet<ProductTransaction> ProductTransactions { get; set; } = null!;
 
         // ----- contacts -----
         public virtual DbSet<Client> Clients { get; set; } = null!;
@@ -58,6 +61,7 @@ namespace API.DbModels.Contexts
         // ----- invoices -----
         public virtual DbSet<Invoice> Invoices { get; set; } = null!;
         public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; } = null!;
+        public virtual DbSet<InvoiceType> InvoiceTypes { get; set; } = null!;
 
         // ---- accounts -----
 
@@ -71,6 +75,11 @@ namespace API.DbModels.Contexts
 
         // ----- ncf ------
         public virtual DbSet<NcfType> NcfTypes { get; set; } = null!;
+        public virtual DbSet<NcfSequence> NcfSequences { get; set; } = null!;
+
+        // warehouse 
+        public virtual DbSet<Warehouse> Warehouses { get; set; } = null!;
+
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

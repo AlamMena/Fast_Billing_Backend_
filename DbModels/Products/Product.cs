@@ -36,14 +36,14 @@ namespace API.DbModels.Products
         //public ICollection<FacturaDetalle> FacturasDetalles { get; set; }
         public ICollection<ProductPrice> Prices { get; set; }
         public ICollection<ProductImage> Images { get; set; }
-        public ICollection<ProductStock> Stock { get; set; }
+        public ICollection<ProductStock> Stocks { get; set; }
 
         public Product()
         {
             //FacturasDetalles = new HashSet<FacturaDetalle>();
             Images = new HashSet<ProductImage>();
             Prices = new HashSet<ProductPrice>();
-            Stock = new HashSet<ProductStock>();
+            Stocks = new HashSet<ProductStock>();
 
         }
 

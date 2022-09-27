@@ -2,10 +2,12 @@
 using API.DbModels.Inventory.Warehouses;
 using API.DbModels.Products;
 using API.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Inventory.Core
 {
-    public class InventoryTransaction : TenantModel
+    [Table("inventory_prodcuts_transactions")]
+    public class ProductTransaction : TenantModel
     {
         public int WarehouseId { get; set; }
         public Warehouse Warehouse { get; set; } = null!;

@@ -83,7 +83,7 @@ namespace API.Controllers
             return Created("", responseEntity);
 
         }
-        [HttpPut]
+        [HttpPut("[controller]")]
         public virtual async Task<IActionResult> PutAsync(TDto request)
         {
             var dbEntity = await _context.Set<TModel>().FindAsync(request.Id);
