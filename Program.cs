@@ -73,3 +73,47 @@ app.UseMiddleware<ExceptionHandler>();
 app.MapControllers();
 
 app.Run();
+
+
+
+
+
+
+
+
+
+
+//"local": "Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB; trusted_connection=true;",
+
+//  USE [FastBillingDB]
+// GO
+// /****** Object:  StoredProcedure [dbo].[sp_get_ncf_sequence]    Script Date: 28/9/2022 5:11:30 p. m. ******/
+// SET ANSI_NULLS ON
+// GO
+// SET QUOTED_IDENTIFIER ON
+// GO
+// ALTER PROCEDURE [dbo].[sp_get_ncf_sequence] (@ncf_type int,
+// @company int,
+// @branch int,
+// @ncf varchar(20) OUTPUT,
+// @expiration_date Datetime OUTPUT)
+// AS
+// BEGIN
+//   SET NOCOUNT ON;
+//   -- UPDATE SEQUENCE -- 
+//   UPDATE sales_ncf_sequences
+//   SET LastNumber = LastNumber + 1
+//   WHERE CompanyId = @company
+//   AND BranchId = @branch
+//   AND NCFTypeId = @ncf_type;
+
+//   -- SELECT SEQUENCE --
+//   SELECT
+//     @ncf = Prefix + FORMAT(LastNumber,'00000000'),
+// 	@expiration_date = ExpirationDate
+//   FROM sales_ncf_sequences AS s
+//   WHERE CompanyId = @Company
+//   AND BranchId = @Branch
+//   AND NCFTypeId = @Ncf_type
+//   AND SequenceUntil > (LastNumber + 1);
+// END;
