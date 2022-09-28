@@ -86,7 +86,8 @@ namespace API.DbModels.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB;trusted_connection=true;");
+                //optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB;trusted_connection=true;");
+                optionsBuilder.UseSqlServer("Server=fastbillingdb.database.windows.net;Initial Catalog=FastBillingDB;Persist Security Info=False;User ID=fb2701;Password=FastBilling2701.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -191,7 +192,7 @@ namespace API.DbModels.Contexts
                 .SelectMany(t => t.GetProperties())
                 .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
             {
-                property.SetColumnType("decimal(18,6)");
+                property.SetColumnType("decimal(18,4)");
             }
         }
         public void SetQueryFilters(ModelBuilder modelBuilder)

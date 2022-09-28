@@ -55,7 +55,7 @@ public class UsersController : ControllerBase
 
         while (value < 5)
         {
-            client.PostAsync(Url, data);
+            await client.PostAsync(Url, data);
             value++;
         }
         // var response = await client.PostAsync(Url, data);

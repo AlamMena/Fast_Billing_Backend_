@@ -1,3 +1,4 @@
+using API.DbModels.Contacts;
 using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
 using API.DbModels.Inventory.SubCategories;
@@ -11,6 +12,7 @@ using API.Dtos.Inventory.Categories;
 using API.Dtos.Inventory.SubCategories;
 using API.Dtos.Inventory.Warehouses;
 using API.Dtos.Products;
+using API.Dtos.Sales.Clients;
 using API.Dtos.Sales.Invoices;
 using API.Dtos.System;
 using API.Dtos.System.Branches;
@@ -49,6 +51,10 @@ namespace API.Mappers
             // invoice 
             CreateMap<Invoice, InvoiceDto>().ReverseMap();
             CreateMap<InvoiceDetail, InvoiceDetailDto>().ReverseMap();
+
+            // client
+            CreateMap<Client, ClientDto>().ReverseMap();
+
         }
     }
 }

@@ -12,7 +12,7 @@
         public decimal TotalPayed { get; set; }
         public string? Note { get; set; }
         public bool Updated { get; set; }
-        public ICollection<InvoiceDetailDto> Details { get; set; } 
+        public List<InvoiceDetailDto> Details { get; set; }
 
         public InvoiceDto()
         {
