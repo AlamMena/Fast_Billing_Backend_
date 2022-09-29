@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace API.Services.Sales.Invoices
 {
-    public class InvoiceService
+    public class InvoiceService : IInvoiceService
     {
         private readonly FbContext _context;
         private readonly IMapper _mapper;
@@ -106,7 +106,7 @@ namespace API.Services.Sales.Invoices
         private async Task<bool> SetClientDataAsync(Invoice invoice)
         {
             // client information
-            var client = await _context.Clients.FindAsync(invoice.ClientId) 
+            var client = await _context.Clients.FindAsync(invoice.ClientId)
                 ?? throw new ValidationException("Client is not valid");
 
             // client information
@@ -117,12 +117,10 @@ namespace API.Services.Sales.Invoices
 
             return true;
         }
-        public async Task<InvoiceDto> PostInvoiceAsync(InvoiceDto request)
+        public async Task<Invoice> PostInvoiceAsync(Invoice invoice)
         {
             await _context.Database.BeginTransactionAsync();
 
-            // mapping request values to db model
-            var invoice = _mapper.Map<Invoice>(request);
 
             // validating the request
             await ValidateInvoiceAsync(invoice);

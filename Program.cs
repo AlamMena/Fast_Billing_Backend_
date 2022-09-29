@@ -4,6 +4,7 @@ using API.Extensions;
 using API.Mappers;
 using API.Services.Firebase;
 using API.Services.Sales.Ncf;
+using API.Services.Sales.Invoices;
 using API.Services.Users;
 using API.Swagger;
 using Microsoft.OpenApi.Models;
@@ -27,6 +28,7 @@ builder.Services.AddHttpContextAccessor();
 // db services
 builder.Services.AddScoped<IUserManagement, UserManagement>();
 builder.Services.AddScoped<INcfService, NcfService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 
 // lib services

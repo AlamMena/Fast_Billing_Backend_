@@ -144,30 +144,6 @@ namespace API.DbModels.Contexts
 
             SetPrecision(modelBuilder);
 
-            // users 
-            modelBuilder.Entity<User>();
-
-            // system 
-            modelBuilder.Entity<Company>();
-            modelBuilder.Entity<Branch>();
-
-            // inventory
-            modelBuilder.Entity<Brand>();
-            modelBuilder.Entity<Category>();
-
-            //Products
-            modelBuilder.Entity<Product>();
-            modelBuilder.Entity<ProductImage>();
-            modelBuilder.Entity<ProductPrice>();
-            modelBuilder.Entity<ProductStock>();
-
-            // contacts 
-            modelBuilder.Entity<Client>();
-            modelBuilder.Entity<ClientAddresses>();
-            modelBuilder.Entity<ClientCard>();
-            modelBuilder.Entity<ClientContacts>();
-            modelBuilder.Entity<ClientType>();
-
         }
 
         public void SetTenant<T>(ModelBuilder modelBuilder) where T : class
