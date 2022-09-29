@@ -4,13 +4,16 @@ using API.DbModels.Inventory.Categories;
 using API.DbModels.Inventory.SubCategories;
 using API.DbModels.Inventory.Warehouses;
 using API.DbModels.Invoices;
+using API.DbModels.Payments;
 using API.DbModels.Products;
 using API.DbModels.System.Branches;
 using API.DbModels.System.Companies;
+using API.Dtos.Core;
 using API.Dtos.Inventory.Brands;
 using API.Dtos.Inventory.Categories;
 using API.Dtos.Inventory.SubCategories;
 using API.Dtos.Inventory.Warehouses;
+using API.Dtos.Payments;
 using API.Dtos.Products;
 using API.Dtos.Sales.Clients;
 using API.Dtos.Sales.Invoices;
@@ -54,6 +57,15 @@ namespace API.Mappers
 
             // client
             CreateMap<Client, ClientDto>().ReverseMap();
+            CreateMap<ClientAddresses, ClientAddressesDto>().ReverseMap();
+            CreateMap<ClientContacts, ClientContactDto>().ReverseMap();
+            CreateMap<TypeDto, ClientType>().ReverseMap();
+
+
+            // payments 
+            CreateMap<Payment, PaymentDto>().ReverseMap();
+
+
 
         }
     }

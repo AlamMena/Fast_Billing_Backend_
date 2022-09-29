@@ -10,15 +10,12 @@ namespace API.Controllers
 {
     public class SubCategoryController : CoreController<SubCategory, SubCategoryDto>
     {
-        private readonly FbContext _context;
         public SubCategoryController(FbContext context, IMapper mapper)
             : base(context, mapper)
         {
-            _context = context;
         }
 
-        [NonAction]
-        public override async Task<bool> ValidateAsync(SubCategoryDto request)
+        protected override async Task<bool> ValidateAsync(SubCategory request)
         {
             var subcatagoryExists = await _context.SubCategories.AnyAsync(d => d.Id != request.Id && d.Name == request.Name);
             if (subcatagoryExists)

@@ -10,7 +10,7 @@ namespace API.DbModels.AccountsReceivable
         public decimal Amount { get; set; }
         public TransactionType Sign { get; set; }
         public string Document { get; set; } = null!;
-        public int AccounReceivabletId { get; set; }
+        public int AccounReceivableId { get; set; }
         public AccountReceivable Account { get; set; } = null!;
         public int Reference { get; set; }
 

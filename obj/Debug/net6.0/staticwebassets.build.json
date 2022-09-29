@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "EjfRe++oz6ho9w9C++H/XWdrfixqhCpZ2T7lcqZe7MU=",
+  "Hash": "xyM/e6uHb2zzNZDAqMeNGhkvSKO9WGoGpNIcVF9ha7Y=",
   "Source": "API",
   "BasePath": "_content/API",
   "Mode": "Default",
@@ -8,19 +8,19 @@
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [
     {
-      "Name": "API/wwwroot",
+      "Name": "API\\wwwroot",
       "Source": "API",
-      "ContentRoot": "/Users/alam/Desktop/Fast-Billing/Fast_Billing_Backend_/wwwroot/",
+      "ContentRoot": "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\wwwroot\\",
       "BasePath": "_content/API",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "/Users/alam/Desktop/Fast-Billing/Fast_Billing_Backend_/wwwroot/fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json",
+      "Identity": "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\wwwroot\\fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json",
       "SourceId": "API",
       "SourceType": "Discovered",
-      "ContentRoot": "/Users/alam/Desktop/Fast-Billing/Fast_Billing_Backend_/wwwroot/",
+      "ContentRoot": "C:\\Users\\extamena\\Desktop\\App_FReact\\Fb-Backend\\wwwroot\\",
       "BasePath": "_content/API",
       "RelativePath": "fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json",
       "AssetKind": "All",
@@ -31,7 +31,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot/fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json"
+      "OriginalItemSpec": "wwwroot\\fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json"
     }
   ]
 }

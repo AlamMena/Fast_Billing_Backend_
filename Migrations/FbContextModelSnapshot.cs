@@ -142,7 +142,7 @@ namespace API.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("DisccountAmount")
+                    b.Property<decimal>("DiscountAmount")
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("Document")
@@ -225,6 +225,9 @@ namespace API.Migrations
                     b.Property<DateTime>("InitialDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -251,6 +254,8 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("InvoiceId");
+
                     b.ToTable("accounts_recivable");
                 });
 
@@ -262,7 +267,7 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AccounReceivabletId")
+                    b.Property<int>("AccounReceivableId")
                         .HasColumnType("int");
 
                     b.Property<int>("AccountId")
@@ -314,7 +319,7 @@ namespace API.Migrations
                     b.Property<bool>("AllowCredit")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("AllowDisccount")
+                    b.Property<bool>("AllowDiscount")
                         .HasColumnType("bit");
 
                     b.Property<int?>("BranchId")
@@ -335,7 +340,7 @@ namespace API.Migrations
                     b.Property<decimal>("CreditLimit")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<decimal>("Disccount")
+                    b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("DocNum")
@@ -386,6 +391,10 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
@@ -939,7 +948,7 @@ namespace API.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Disccount")
+                    b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("DocNum")
@@ -1055,10 +1064,10 @@ namespace API.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Disccount")
+                    b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<decimal>("DisscountAmount")
+                    b.Property<decimal>("DiscountAmount")
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<bool>("Excent")
@@ -1261,6 +1270,151 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("sales_ncf_types");
+                });
+
+            modelBuilder.Entity("API.DbModels.Payments.Bank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("globals_payments_banks");
+                });
+
+            modelBuilder.Entity("API.DbModels.Payments.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int?>("BankId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CardNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("InvoiceId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PaymentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Reference")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReferenceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("InvoiceId");
+
+                    b.HasIndex("PaymentTypeId");
+
+                    b.ToTable("globals_payments");
+                });
+
+            modelBuilder.Entity("API.DbModels.Payments.PaymentType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("globals_payments_types");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
@@ -1800,6 +1954,10 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
+                    b.HasOne("API.DbModels.Invoices.Invoice", null)
+                        .WithMany("AccountReceivables")
+                        .HasForeignKey("InvoiceId");
+
                     b.Navigation("Branch");
 
                     b.Navigation("Client");
@@ -2064,6 +2222,39 @@ namespace API.Migrations
                     b.Navigation("NCFType");
                 });
 
+            modelBuilder.Entity("API.DbModels.Payments.Payment", b =>
+                {
+                    b.HasOne("API.DbModels.Payments.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId");
+
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId");
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("API.DbModels.Invoices.Invoice", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("InvoiceId");
+
+                    b.HasOne("API.DbModels.Payments.PaymentType", "PaymentType")
+                        .WithMany()
+                        .HasForeignKey("PaymentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bank");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("PaymentType");
+                });
+
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
@@ -2224,7 +2415,11 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.DbModels.Invoices.Invoice", b =>
                 {
+                    b.Navigation("AccountReceivables");
+
                     b.Navigation("Details");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>

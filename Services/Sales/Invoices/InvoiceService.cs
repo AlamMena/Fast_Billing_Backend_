@@ -1,6 +1,9 @@
-﻿using API.DbModels.Contexts;
+﻿using API.DbModels.AccountsReceivable;
+using API.DbModels.Contexts;
 using API.DbModels.Invoices;
 using API.Dtos.Sales.Invoices;
+using API.Enums;
+using API.Extensions;
 using API.Services.Sales.Ncf;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -117,6 +120,65 @@ namespace API.Services.Sales.Invoices
 
             return true;
         }
+        private async Task<bool> PayInvoiceAsync(Invoice invoice)
+        {
+            var client = await _context.Clients.FindAsync(invoice.ClientId);
+            if (client is null)
+            {
+                throw new ValidationException("The client is not valid");
+            }
+
+            // initial account
+            var account = new AccountReceivable
+            {
+                ClientId = invoice.ClientId,
+                ClientName = client.Name,
+                ClientDocNum = client.DocNum,
+                InitialDate = invoice.Date,
+                ExpirationDate = invoice.NcfExpiration,
+                TaxAmount = invoice.TaxAmount,
+                Amount = invoice.Total,
+                Balance = 0,
+                Document = AccountDocuments.Invoice.GetDocumentKey(),
+                Reference = invoice.DocNum,
+                ReferenceId = invoice.Id,
+                Confirmed = true,
+            };
+
+            //  out transaction
+            account.Transactions.Add(new AccountReceivableTransaction()
+            {
+                Amount = invoice.Total,
+                Sign = TransactionType.Outcome,
+                Document = AccountDocuments.Invoice.GetDocumentKey(),
+                Reference = account.DocNum
+            });
+
+            // in transaction 
+            account.Transactions.Add(new AccountReceivableTransaction()
+            {
+                Amount = invoice.Total,
+                Sign = TransactionType.Income,
+                Document = AccountDocuments.Invoice.GetDocumentKey(),
+                Reference = account.DocNum
+            });
+
+            // generating payments
+            invoice.Payments.ToList().ForEach(d =>
+            {
+                d.Id = 0;
+                d.CompanyId = _context.tenant.CompanyId;
+                d.BranchId = _context.tenant.BranchId;
+                d.Amount = invoice.Total;
+                d.Document = AccountDocuments.Invoice.GetDocumentKey();
+                d.Reference = invoice.DocNum;
+            });
+
+            await _context.SaveChangesAsync();
+
+            return true;
+
+        }
         public async Task<Invoice> PostInvoiceAsync(Invoice invoice)
         {
             await _context.Database.BeginTransactionAsync();
@@ -139,16 +201,19 @@ namespace API.Services.Sales.Invoices
             await SetClientDataAsync(invoice);
 
             // adding the invoice changes
+            // await _context.AddAsync(invoice);
+            // await _context.SaveChangesAsync();
+
+            // account receivable
+            await PayInvoiceAsync(invoice);
+
             await _context.AddAsync(invoice);
             await _context.SaveChangesAsync();
-
-            // building response
-            var response = _mapper.Map<InvoiceDto>(invoice);
 
             // commiting changes
             await _context.Database.CommitTransactionAsync();
 
-            return response;
+            return invoice;
         }
     }
 }

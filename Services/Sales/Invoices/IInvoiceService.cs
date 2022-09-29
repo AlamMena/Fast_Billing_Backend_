@@ -1,7 +1,9 @@
+using API.DbModels.Invoices;
+
 namespace API.Services.Sales.Invoices
 {
     public interface IInvoiceService
     {
-        Task<InvoiceDto> PostInvoiceAsync(InvoiceDto request);
+        Task<Invoice> PostInvoiceAsync(Invoice request);
     }
 }

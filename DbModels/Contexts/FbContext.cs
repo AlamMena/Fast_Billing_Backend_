@@ -15,12 +15,13 @@ using API.DbModels.Ncf;
 using API.DbModels.Inventory.SubCategories;
 using API.DbModels.Inventory.Warehouses;
 using API.DbModels.Inventory.Core;
+using API.Enums;
 
 namespace API.DbModels.Contexts
 {
     public class FbContext : DbContext
     {
-        public readonly TenantRequest _tenantRequest = null!;
+        public readonly TenantRequest tenant = null!;
         private readonly IConfiguration _configuration = null!;
 
         public FbContext() { }
@@ -32,7 +33,7 @@ namespace API.DbModels.Contexts
         public FbContext(DbContextOptions<FbContext> options, TenantRequest tenantRequest)
                 : base(options)
         {
-            _tenantRequest = tenantRequest;
+            tenant = tenantRequest;
         }
         // ----- system ----- 
         public virtual DbSet<Company> Companies { get; set; } = null!;
@@ -57,6 +58,8 @@ namespace API.DbModels.Contexts
         public virtual DbSet<ClientAddresses> ClientAddresses { get; set; } = null!;
         public virtual DbSet<ClientCard> ClientCards { get; set; } = null!;
         public virtual DbSet<ClientContacts> ClientContacts { get; set; } = null!;
+        public virtual DbSet<ClientType> ClientTypes { get; set; } = null!;
+
 
         // ----- invoices -----
         public virtual DbSet<Invoice> Invoices { get; set; } = null!;
@@ -86,8 +89,8 @@ namespace API.DbModels.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB;trusted_connection=true;");
-                optionsBuilder.UseSqlServer("Server=fastbillingdb.database.windows.net;Initial Catalog=FastBillingDB;Persist Security Info=False;User ID=fb2701;Password=FastBilling2701.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB;trusted_connection=true;");
+                // optionsBuilder.UseSqlServer("Server=fastbillingdb.database.windows.net;Initial Catalog=FastBillingDB;Persist Security Info=False;User ID=fb2701;Password=FastBilling2701.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -100,14 +103,14 @@ namespace API.DbModels.Contexts
             {
                 if (companyIdField.GetValue(entity) is null)
                 {
-                    entity.GetType()?.GetProperty("CompanyId")?.SetValue(entity, _tenantRequest.CompanyId);
+                    entity.GetType()?.GetProperty("CompanyId")?.SetValue(entity, tenant.CompanyId);
                 }
             }
             else if (branchIdField is not null)
             {
                 if (branchIdField.GetValue(entity) is null)
                 {
-                    entity.GetType()?.GetProperty("branchId")?.SetValue(entity, _tenantRequest.BranchId);
+                    entity.GetType()?.GetProperty("branchId")?.SetValue(entity, tenant.BranchId);
                 }
             }
         }
@@ -124,12 +127,12 @@ namespace API.DbModels.Contexts
                 if (entity.CreatedBy == 0)
                 {
                     entity.IsDeleted = false;
-                    entity.CreatedBy = _tenantRequest.UserId;
+                    entity.CreatedBy = tenant.UserId;
                     entity.CreationDate = DateTime.Now;
                 }
                 else
                 {
-                    entity.UpdatedBy = _tenantRequest.UserId;
+                    entity.UpdatedBy = tenant.UserId;
                     entity.UpdatedDate = DateTime.Now;
                 }
 
@@ -144,6 +147,7 @@ namespace API.DbModels.Contexts
 
             SetPrecision(modelBuilder);
 
+            // .HasForeignKey(d => d.ReferenceId);
         }
 
         public void SetTenant<T>(ModelBuilder modelBuilder) where T : class
@@ -152,12 +156,12 @@ namespace API.DbModels.Contexts
             if (typeof(T) == typeof(Company))
             {
                 modelBuilder.Entity<T>()
-                            .HasQueryFilter(e => EF.Property<int>(e, "Id") == _tenantRequest.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
+                            .HasQueryFilter(e => EF.Property<int>(e, "Id") == tenant.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
             }
             else
             {
                 modelBuilder.Entity<T>()
-                            .HasQueryFilter(e => EF.Property<int>(e, "CompanyId") == _tenantRequest.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
+                            .HasQueryFilter(e => EF.Property<int>(e, "CompanyId") == tenant.CompanyId && EF.Property<bool>(e, "IsDeleted") == false);
 
             }
         }

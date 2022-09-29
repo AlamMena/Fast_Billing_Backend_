@@ -16,19 +16,17 @@ namespace API.Controllers
     [ApiController]
     [Authorize]
     [Route("api")]
-    public class InvoiceController : CoreController<InvoiceDto, Invoice>
+    public class InvoiceController : CoreController<Invoice, InvoiceDto>
     {
         private readonly IInvoiceService _invoiceService;
-        private readonly IMapper _mapper;
-        public InvoiceController(FbContext context, IMapper mapper, IInvoiceService invoiceService)
+        public InvoiceController(FbContext context,IMapper mapper,IInvoiceService invoiceService)
             : base(context, mapper)
         {
-            _mapper = mapper;
             _invoiceService = invoiceService;
         }
 
         [HttpPost("invoice")]
-        public async Task<IActionResult> PostInvoiceAsync(InvoiceDto request)
+        public override async Task<IActionResult> PostAsync(InvoiceDto request)
         {
             var mappedRequest = _mapper.Map<Invoice>(request);
             var invoice = await _invoiceService.PostInvoiceAsync(mappedRequest);

@@ -18,8 +18,8 @@ namespace API.Controllers
         where TDto : CoreDto
 
     {
-        private readonly FbContext _context;
-        private readonly IMapper _mapper;
+        protected readonly FbContext _context;
+        protected readonly IMapper _mapper;
 
         public CoreController(FbContext context, IMapper mapper)
         {
@@ -27,8 +27,7 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [NonAction]
-        public virtual async Task<bool> ValidateAsync(TDto request)
+        protected virtual async Task<bool> ValidateAsync(TModel request)
         {
             await Task.CompletedTask;
 
@@ -71,9 +70,10 @@ namespace API.Controllers
         [HttpPost("[controller]")]
         public virtual async Task<IActionResult> PostAsync(TDto request)
         {
-            await ValidateAsync(request);
 
             var dbEntity = _mapper.Map<TModel>(request);
+
+            await ValidateAsync(dbEntity);
 
             await _context.AddAsync(dbEntity);
             await _context.SaveChangesAsync();
@@ -92,6 +92,8 @@ namespace API.Controllers
             {
                 return NotFound();
             }
+
+            await ValidateAsync(dbEntity);
 
             _mapper.Map(request, dbEntity);
 

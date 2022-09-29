@@ -19,8 +19,8 @@ namespace API.DbModels.Invoices
         public decimal Avarage { get; set; }
         public decimal OriginalPrice { get; set; }
         public decimal Price { get; set; }
-        public decimal Disccount { get; set; }
-        public decimal DisscountAmount { get; set; }
+        public decimal Discount { get; set; }
+        public decimal DiscountAmount { get; set; }
         public decimal Tax { get; set; }
         public decimal TaxAmount { get; set; }
         public decimal Total { get; set; }

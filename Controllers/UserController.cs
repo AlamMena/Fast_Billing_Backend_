@@ -7,6 +7,7 @@ using AutoMapper;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 [ApiController]
@@ -36,9 +37,6 @@ public class UsersController : ControllerBase
 
         var result = response.Content.ReadAsStringAsync().Result;
 
-
-
-
         return Ok(result);
     }
 
@@ -52,6 +50,7 @@ public class UsersController : ControllerBase
         var data = new StringContent(usuario, Encoding.UTF8, "application/json");
 
         var value = 0;
+
 
         while (value < 5)
         {

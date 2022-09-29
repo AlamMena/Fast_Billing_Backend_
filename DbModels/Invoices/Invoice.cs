@@ -1,6 +1,8 @@
-﻿using API.DbModels.Contacts;
+﻿using API.DbModels.AccountsReceivable;
+using API.DbModels.Contacts;
 using API.DbModels.Core;
 using API.DbModels.Ncf;
+using API.DbModels.Payments;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Invoices
@@ -39,7 +41,7 @@ namespace API.DbModels.Invoices
         public decimal TotalGrab { get; set; }
         public decimal SaveAmount { get; set; }
         public decimal AccountAmount { get; set; }
-        public decimal Disccount { get; set; }
+        public decimal Discount { get; set; }
         public bool Confirmed { get; set; }
         public decimal Total { get; set; }
         public decimal TotalPayed { get; set; }
@@ -47,10 +49,15 @@ namespace API.DbModels.Invoices
         public string? Note { get; set; }
         public bool Updated { get; set; }
         public ICollection<InvoiceDetail> Details { get; set; }
+        public ICollection<AccountReceivable> AccountReceivables { get; set; }
+        // public AccountReceivable Account { get; set; } = null!;
+        public ICollection<Payment> Payments { get; set; }
 
         public Invoice()
         {
             Details = new HashSet<InvoiceDetail>();
+            AccountReceivables = new HashSet<AccountReceivable>();
+            Payments = new HashSet<Payment>();
         }
 
         //public string CajeroId { get; set; } = null!;

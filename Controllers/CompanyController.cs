@@ -10,6 +10,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
@@ -30,6 +31,19 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        private async Task<bool> ValidateCompanyAsync(Company request)
+        {
+            var companyExists = await _context.Companies
+                .AnyAsync(d => d.Id != request.Id && d.Name == request.Name);
+
+            if (companyExists)
+            {
+                throw new ValidationException("The company name is not avaliable");
+            }
+
+            return true;
+        }
+
         [HttpPost("company")]
         public async Task<IActionResult> PostAsync(CompanyCreateDto request)
         {
@@ -37,6 +51,9 @@ namespace API.Controllers
 
             // mapping the dto to db model
             var company = _mapper.Map<Company>(request);
+
+            // validating the new company
+            await ValidateCompanyAsync(company);
 
             // adding a default branch to the company
             company.Branches.Add(new Branch()
@@ -92,10 +109,10 @@ namespace API.Controllers
                 Data = await _context.Companies
                  .Skip((page - 1) * limit)
                  .Take(limit)
-                 .ToListAsync()
-            };
+                 .ToListAsync(),
 
-            response.DataQuantity = await _context.Companies.CountAsync();
+                DataQuantity = await _context.Companies.CountAsync()
+            };
 
             return Ok(response);
         }

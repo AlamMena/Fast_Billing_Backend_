@@ -28,12 +28,12 @@ namespace API.DbModels.Inventory.GoodsReceipt
         public bool UpdatePrice { get; set; }
         public bool? IncludeTaxes { get; set; }
         public decimal TypedSubtotal { get; set; }
-        public decimal TypedDisccount { get; set; }
+        public decimal TypedDiscount { get; set; }
         public decimal TypedTotalTax { get; set; }
         public decimal TypedTotalCharge { get; set; }
         public decimal TypedTotal { get; set; }
         public decimal SubTotal { get; set; }
-        public decimal TotalDisccount { get; set; }
+        public decimal TotalDiscount { get; set; }
         public decimal TotalTax { get; set; }
         public decimal TotalCharge { get; set; }
         public decimal Total { get; set; }

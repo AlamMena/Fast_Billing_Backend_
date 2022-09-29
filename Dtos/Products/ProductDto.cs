@@ -20,6 +20,7 @@ namespace API.Dtos.Products
         public string? Size { get; set; }
 
         // prices
+        [Range(0.0, double.MaxValue, ErrorMessage = "The field {0} must be greater than {1}.")]
         public decimal Price { get; set; }
         public decimal Cost { get; set; }
         public decimal MarginBenefit { get; set; }

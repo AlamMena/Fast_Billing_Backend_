@@ -5,6 +5,8 @@ using API.Dtos.System.Branches;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.Controllers
 {
@@ -16,12 +18,20 @@ namespace API.Controllers
             : base(context, mapper)
         {
         }
-
+        protected override async Task<bool> ValidateAsync(Branch request)
+        {
+           var branchExists =  await _context.Branches
+                .AnyAsync(d => d.Id != request.Id && d.Name == request.Name);
+            if (branchExists)
+            {
+                throw new ValidationException("The branch name is not avaliable");
+            }
+            return true;
+        }
         [HttpGet("branches")]
         public override async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
         {
             return await base.GetAllAsync(page, limit);
         }
-
     }
 }

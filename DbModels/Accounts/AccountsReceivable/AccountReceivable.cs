@@ -1,5 +1,6 @@
 ﻿using API.DbModels.Contacts;
 using API.DbModels.Core;
+using API.DbModels.Invoices;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.AccountsReceivable
@@ -21,6 +22,7 @@ namespace API.DbModels.AccountsReceivable
         public int Reference { get; set; }
         public int? ReferenceId { get; set; }
         public bool Confirmed { get; set; }
+        public Invoice Invoice { get; set; }
         public ICollection<AccountReceivableTransaction> Transactions { get; set; }
         //public ICollection<ReciboDetalle> ReciboDetalles { get; set; }
 
