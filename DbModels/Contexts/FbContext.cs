@@ -14,8 +14,9 @@ using API.DbModels.AccountsReceivable;
 using API.DbModels.Ncf;
 using API.DbModels.Inventory.SubCategories;
 using API.DbModels.Inventory.Warehouses;
-using API.DbModels.Inventory.Core;
 using API.Enums;
+using API.DbModels.Payments;
+using API.DbModels.Inventory.Products;
 
 namespace API.DbModels.Contexts
 {
@@ -80,7 +81,10 @@ namespace API.DbModels.Contexts
         public virtual DbSet<NcfType> NcfTypes { get; set; } = null!;
         public virtual DbSet<NcfSequence> NcfSequences { get; set; } = null!;
 
-        // warehouse 
+        // --- payments ---
+        public virtual DbSet<PaymentType> PaymentTypes { get; set; } = null!;
+
+        // --- warehouse ---
         public virtual DbSet<Warehouse> Warehouses { get; set; } = null!;
 
 
@@ -148,6 +152,7 @@ namespace API.DbModels.Contexts
             SetPrecision(modelBuilder);
 
             // .HasForeignKey(d => d.ReferenceId);
+            //modelBuilder.Entity<AccountsReceivable>().HasDiscriminator<Invoice>("value").HasValue<int>(0);
         }
 
         public void SetTenant<T>(ModelBuilder modelBuilder) where T : class

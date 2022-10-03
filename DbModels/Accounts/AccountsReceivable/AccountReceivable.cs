@@ -20,9 +20,9 @@ namespace API.DbModels.AccountsReceivable
         public decimal Balance { get; set; }
         public string Document { get; set; } = null!;
         public int Reference { get; set; }
-        public int? ReferenceId { get; set; }
         public bool Confirmed { get; set; }
-        public Invoice Invoice { get; set; }
+        public int? InvoiceId { get; set; }
+        public Invoice Invoice { get; set; } = null!;
         public ICollection<AccountReceivableTransaction> Transactions { get; set; }
         //public ICollection<ReciboDetalle> ReciboDetalles { get; set; }
 

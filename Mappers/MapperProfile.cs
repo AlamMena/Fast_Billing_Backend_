@@ -4,6 +4,7 @@ using API.DbModels.Inventory.Categories;
 using API.DbModels.Inventory.SubCategories;
 using API.DbModels.Inventory.Warehouses;
 using API.DbModels.Invoices;
+using API.DbModels.Ncf;
 using API.DbModels.Payments;
 using API.DbModels.Products;
 using API.DbModels.System.Branches;
@@ -54,6 +55,10 @@ namespace API.Mappers
             // invoice 
             CreateMap<Invoice, InvoiceDto>().ReverseMap();
             CreateMap<InvoiceDetail, InvoiceDetailDto>().ReverseMap();
+            CreateMap<InvoiceType, TypeDto>().ReverseMap();
+
+            // ncf
+            CreateMap<NcfType, TypeDto>().ReverseMap();
 
             // client
             CreateMap<Client, ClientDto>().ReverseMap();
@@ -64,6 +69,8 @@ namespace API.Mappers
 
             // payments 
             CreateMap<Payment, PaymentDto>().ReverseMap();
+            CreateMap<PaymentType, TypeDto>().ReverseMap();
+
 
 
 

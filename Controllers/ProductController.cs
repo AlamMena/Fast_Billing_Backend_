@@ -1,5 +1,5 @@
 ﻿using API.DbModels.Contexts;
-using API.DbModels.Inventory.Core;
+using API.DbModels.Inventory.Products;
 using API.DbModels.Products;
 using API.Dtos.Core;
 using API.Dtos.Products;
@@ -90,11 +90,8 @@ namespace API.Controllers
                 Stock = request.Stock,
             });
 
-            await _context.AddAsync(product);
-            await _context.SaveChangesAsync();
-
             // generating the initial transaction
-            await _context.AddAsync(new ProductTransaction()
+            product.Transactions.Add(new ProductTransaction()
             {
                 WarehouseId = request.WarehouseId,
                 ProductId = product.Id,
@@ -112,8 +109,8 @@ namespace API.Controllers
                 BranchId = _context.tenant.BranchId,
             });
 
+            await _context.AddAsync(product);
             await _context.SaveChangesAsync();
-            await _context.Database.CommitTransactionAsync();
 
             var response = _mapper.Map<ProductDto>(product);
             return Created("", response);

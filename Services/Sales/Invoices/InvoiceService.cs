@@ -1,5 +1,6 @@
 ﻿using API.DbModels.AccountsReceivable;
 using API.DbModels.Contexts;
+using API.DbModels.Inventory.Products;
 using API.DbModels.Invoices;
 using API.Dtos.Sales.Invoices;
 using API.Enums;
@@ -141,7 +142,6 @@ namespace API.Services.Sales.Invoices
                 Balance = 0,
                 Document = AccountDocuments.Invoice.GetDocumentKey(),
                 Reference = invoice.DocNum,
-                ReferenceId = invoice.Id,
                 Confirmed = true,
             };
 
@@ -154,14 +154,6 @@ namespace API.Services.Sales.Invoices
                 Reference = account.DocNum
             });
 
-            // in transaction 
-            account.Transactions.Add(new AccountReceivableTransaction()
-            {
-                Amount = invoice.Total,
-                Sign = TransactionType.Income,
-                Document = AccountDocuments.Invoice.GetDocumentKey(),
-                Reference = account.DocNum
-            });
 
             // generating payments
             invoice.Payments.ToList().ForEach(d =>
@@ -174,10 +166,74 @@ namespace API.Services.Sales.Invoices
                 d.Reference = invoice.DocNum;
             });
 
+            // in transaction 
+            account.Transactions.Add(new AccountReceivableTransaction()
+            {
+                Amount = invoice.Total,
+                Sign = TransactionType.Income,
+                Document = AccountDocuments.Invoice.GetDocumentKey(),
+                Reference = account.DocNum
+            });
+
+            // adding account to invoice
+            invoice.AccountReceivables.Add(account);
+
             await _context.SaveChangesAsync();
 
             return true;
 
+        }
+        private async Task<Invoice> CalculateInvoiceAsync(Invoice invoice)
+        {
+            var products = await _context.Products
+                .Include(d => d.Prices)
+                .Include(d=>d.Stocks)
+                .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
+                .ToListAsync();
+
+            foreach (var detail in invoice.Details)
+            {
+                var product = products.First(d => d.Id == detail.ProductId);
+                product.Transactions.Add(new ProductTransaction
+                {
+                    WarehouseId = product.Stocks.First().WarehouseId,
+                    ProductCost = product.Prices.First().Cost,
+                    ProductPrice = product.Prices.First().Price,
+                    Quantity = detail.Quantity,
+                    Sign = TransactionType.Outcome,
+                    OldQuantity = 0,
+                    NewQuantity = product.Stocks.First().Stock - detail.Quantity,
+                    NewCost = product.Prices.First().Cost,
+                    Note = "Initial transaction",
+                    Document = "IT",
+                    ExpirationDate = null,
+                    CompanyId = _context.tenant.CompanyId,
+                    BranchId = _context.tenant.BranchId,
+                });
+
+                detail.Cost = product.Prices.First().Cost;
+                detail.Price = product.Prices.First().Price;
+                detail.Tax = product.Tax;
+                detail.TaxAmount = detail.Price * detail.Tax > 0 ? (detail.Tax / 100) : 1;
+                detail.Discount = 0;
+                detail.DiscountAmount = 0;
+                detail.Excent = false;
+                detail.Total = (detail.Price * detail.Quantity) * detail.Tax > 0 ? (detail.Tax / 100) : 1;
+            }
+
+            invoice.Subtotal = invoice.Details.Sum(d => d.Price);
+            invoice.Tax = invoice.Details.Sum(d => d.Tax / 100);
+            invoice.TaxAmount = invoice.Details.Sum(d => d.TaxAmount);
+            invoice.Discount = 0;
+            invoice.TotalPayed = invoice.Payments.Sum(d => d.Amount);
+            invoice.Total = invoice.Details.Sum(d => d.Total);
+
+            if (invoice.TotalPayed < invoice.Total)
+            {
+                throw new ValidationException("Total payed is not valid");
+            }
+
+            return invoice;
         }
         public async Task<Invoice> PostInvoiceAsync(Invoice invoice)
         {
@@ -200,9 +256,8 @@ namespace API.Services.Sales.Invoices
             // setting client data
             await SetClientDataAsync(invoice);
 
-            // adding the invoice changes
-            // await _context.AddAsync(invoice);
-            // await _context.SaveChangesAsync();
+            // calculating 
+            await CalculateInvoiceAsync(invoice);
 
             // account receivable
             await PayInvoiceAsync(invoice);
