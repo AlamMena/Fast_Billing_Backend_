@@ -11,11 +11,14 @@ namespace API.Extensions
         {
             services.AddScoped(options =>
             {
+                var enviroment = options.GetRequiredService<IWebHostEnvironment>();
                 var config = options.GetRequiredService<IConfiguration>();
-                var localConnectionString = config.GetConnectionString("Local");
+
+                var connectionString = enviroment.IsDevelopment()
+                    ? config.GetConnectionString("development") : config.GetConnectionString("production");
 
                 // configuring useful dbcontext
-                var builder = new DbContextOptionsBuilder<FbContext>().UseSqlServer(localConnectionString);
+                var builder = new DbContextOptionsBuilder<FbContext>().UseSqlServer(connectionString);
 
                 // getting the service of httpContextAccessor to handle the http request
                 var currentSession = options.GetService<IHttpContextAccessor>();
