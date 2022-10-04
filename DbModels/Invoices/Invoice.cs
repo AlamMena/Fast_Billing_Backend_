@@ -1,6 +1,7 @@
 ﻿using API.DbModels.AccountsReceivable;
 using API.DbModels.Contacts;
 using API.DbModels.Core;
+using API.DbModels.Inventory.Products;
 using API.DbModels.Ncf;
 using API.DbModels.Payments;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -50,6 +51,7 @@ namespace API.DbModels.Invoices
         public bool Updated { get; set; }
         public ICollection<InvoiceDetail> Details { get; set; }
         public ICollection<AccountReceivable> AccountReceivables { get; set; }
+
         // public AccountReceivable Account { get; set; } = null!;
         public ICollection<Payment> Payments { get; set; }
 

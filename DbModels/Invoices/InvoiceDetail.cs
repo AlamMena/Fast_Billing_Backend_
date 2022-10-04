@@ -1,4 +1,5 @@
 ﻿using API.DbModels.Core;
+using API.DbModels.Inventory.Products;
 using API.DbModels.Products;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,5 +30,11 @@ namespace API.DbModels.Invoices
         public decimal Comision { get; set; }
         public string? SellUnity { get; set; }
         public bool Pending { get; set; }
+        public ICollection<ProductTransaction> ProductTransactions { get; set; }
+
+        public InvoiceDetail()
+        {
+            ProductTransactions = new HashSet<ProductTransaction>();
+        }
     }
 }

@@ -64,7 +64,7 @@ namespace API.Services.Sales.Ncf
             var sequence = await _context.Database
                 .ExecuteSqlRawAsync($"sp_get_ncf_sequence @type,@company,@branch,@ncf OUTPUT,@expirationDate OUTPUT", parameters);
 
-            var ncf = (string)parameters[3].Value ?? throw new ValidationException("There is not ncf avaliable");
+            var ncf = parameters[3].Value.GetType() == typeof(DBNull) ? throw new ValidationException("There is not ncf avaliable") : (string)parameters[3].Value;
             // var expirationDate = != null ? (DateTime?)parameters[4].Value : null;
 
             return new NcfResponse(ncf, parameters[4].Value);

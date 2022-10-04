@@ -187,25 +187,27 @@ namespace API.Services.Sales.Invoices
         {
             var products = await _context.Products
                 .Include(d => d.Prices)
-                .Include(d=>d.Stocks)
+                .Include(d => d.Stocks)
                 .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
                 .ToListAsync();
 
             foreach (var detail in invoice.Details)
             {
                 var product = products.First(d => d.Id == detail.ProductId);
-                product.Transactions.Add(new ProductTransaction
+
+                detail.ProductTransactions.Add(new ProductTransaction
                 {
                     WarehouseId = product.Stocks.First().WarehouseId,
                     ProductCost = product.Prices.First().Cost,
                     ProductPrice = product.Prices.First().Price,
+                    ProductId = product.Id,
                     Quantity = detail.Quantity,
                     Sign = TransactionType.Outcome,
                     OldQuantity = 0,
                     NewQuantity = product.Stocks.First().Stock - detail.Quantity,
                     NewCost = product.Prices.First().Cost,
-                    Note = "Initial transaction",
-                    Document = "IT",
+                    Note = "N/A",
+                    Document = AccountDocuments.Invoice.GetDocumentKey(),
                     ExpirationDate = null,
                     CompanyId = _context.tenant.CompanyId,
                     BranchId = _context.tenant.BranchId,
@@ -218,7 +220,7 @@ namespace API.Services.Sales.Invoices
                 detail.Discount = 0;
                 detail.DiscountAmount = 0;
                 detail.Excent = false;
-                detail.Total = (detail.Price * detail.Quantity) * detail.Tax > 0 ? (detail.Tax / 100) : 1;
+                detail.Total = (detail.Price * detail.Quantity) * (detail.Tax > 0 ? (detail.Tax / 100) : 1);
             }
 
             invoice.Subtotal = invoice.Details.Sum(d => d.Price);
@@ -226,6 +228,7 @@ namespace API.Services.Sales.Invoices
             invoice.TaxAmount = invoice.Details.Sum(d => d.TaxAmount);
             invoice.Discount = 0;
             invoice.TotalPayed = invoice.Payments.Sum(d => d.Amount);
+            invoice.Return = invoice.TotalPayed - invoice.Total;
             invoice.Total = invoice.Details.Sum(d => d.Total);
 
             if (invoice.TotalPayed < invoice.Total)

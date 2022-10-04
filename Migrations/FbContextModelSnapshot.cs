@@ -116,7 +116,7 @@ namespace API.Migrations
 
                     b.HasIndex("SupplierId");
 
-                    b.ToTable("accounts_payable", (string)null);
+                    b.ToTable("accounts_payable");
                 });
 
             modelBuilder.Entity("API.DbModels.Accounts.AccountsPayable.AccountPaybleTransaction", b =>
@@ -168,7 +168,7 @@ namespace API.Migrations
 
                     b.HasIndex("AccountPayableId");
 
-                    b.ToTable("accounts_payable_transactions", (string)null);
+                    b.ToTable("accounts_payable_transactions");
                 });
 
             modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivable", b =>
@@ -253,7 +253,7 @@ namespace API.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("accounts_recivable", (string)null);
+                    b.ToTable("accounts_recivable");
                 });
 
             modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivableTransaction", b =>
@@ -299,7 +299,7 @@ namespace API.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("accounts_receivable_details", (string)null);
+                    b.ToTable("accounts_receivable_details");
                 });
 
             modelBuilder.Entity("API.DbModels.Contacts.Client", b =>
@@ -375,7 +375,7 @@ namespace API.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("sales_clients", (string)null);
+                    b.ToTable("sales_clients");
                 });
 
             modelBuilder.Entity("API.DbModels.Contacts.ClientAddresses", b =>
@@ -429,7 +429,7 @@ namespace API.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("sales_clients_addresses", (string)null);
+                    b.ToTable("sales_clients_addresses");
                 });
 
             modelBuilder.Entity("API.DbModels.Contacts.ClientCard", b =>
@@ -474,7 +474,7 @@ namespace API.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("sales_clients_cards", (string)null);
+                    b.ToTable("sales_clients_cards");
                 });
 
             modelBuilder.Entity("API.DbModels.Contacts.ClientContacts", b =>
@@ -515,7 +515,7 @@ namespace API.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("sales_clients_contacts", (string)null);
+                    b.ToTable("sales_clients_contacts");
                 });
 
             modelBuilder.Entity("API.DbModels.Contacts.ClientType", b =>
@@ -550,7 +550,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("sales_clients_types", (string)null);
+                    b.ToTable("sales_clients_types");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Brands.Brand", b =>
@@ -601,7 +601,7 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("inventory_brands", (string)null);
+                    b.ToTable("inventory_brands");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Categories.Category", b =>
@@ -652,10 +652,45 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("inventory_categories", (string)null);
+                    b.ToTable("inventory_categories");
                 });
 
-            modelBuilder.Entity("API.DbModels.Inventory.Core.ProductTransaction", b =>
+            modelBuilder.Entity("API.DbModels.Inventory.Currencies.Currency", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("system_currency");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.Products.ProductTransaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -687,6 +722,9 @@ namespace API.Migrations
 
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("InvoiceDetailId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -737,46 +775,13 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("InvoiceDetailId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("inventory_prodcuts_transactions", (string)null);
-                });
-
-            modelBuilder.Entity("API.DbModels.Inventory.Currencies.Currency", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("system_currency", (string)null);
+                    b.ToTable("inventory_prodcuts_transactions");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.SubCategories.SubCategory", b =>
@@ -832,7 +837,7 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("inventory_subcategories", (string)null);
+                    b.ToTable("inventory_subcategories");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Warehouses.Warehouse", b =>
@@ -880,7 +885,7 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("inventory_warehouses", (string)null);
+                    b.ToTable("inventory_warehouses");
                 });
 
             modelBuilder.Entity("API.DbModels.Invoices.Invoice", b =>
@@ -1032,7 +1037,7 @@ namespace API.Migrations
 
                     b.HasIndex("NcfTypeId");
 
-                    b.ToTable("sales_invoices", (string)null);
+                    b.ToTable("sales_invoices");
                 });
 
             modelBuilder.Entity("API.DbModels.Invoices.InvoiceDetail", b =>
@@ -1119,7 +1124,7 @@ namespace API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("sales_invoices_details", (string)null);
+                    b.ToTable("sales_invoices_details");
                 });
 
             modelBuilder.Entity("API.DbModels.Invoices.InvoiceType", b =>
@@ -1155,7 +1160,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("sales_invoices_types", (string)null);
+                    b.ToTable("sales_invoices_types");
                 });
 
             modelBuilder.Entity("API.DbModels.Ncf.NcfSequence", b =>
@@ -1223,7 +1228,7 @@ namespace API.Migrations
 
                     b.HasIndex("NCFTypeId");
 
-                    b.ToTable("sales_ncf_sequences", (string)null);
+                    b.ToTable("sales_ncf_sequences");
                 });
 
             modelBuilder.Entity("API.DbModels.Ncf.NcfType", b =>
@@ -1263,7 +1268,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("sales_ncf_types", (string)null);
+                    b.ToTable("sales_ncf_types");
                 });
 
             modelBuilder.Entity("API.DbModels.Payments.Bank", b =>
@@ -1298,7 +1303,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("globals_payments_banks", (string)null);
+                    b.ToTable("globals_payments_banks");
                 });
 
             modelBuilder.Entity("API.DbModels.Payments.Payment", b =>
@@ -1373,7 +1378,7 @@ namespace API.Migrations
 
                     b.HasIndex("PaymentTypeId");
 
-                    b.ToTable("globals_payments", (string)null);
+                    b.ToTable("globals_payments");
                 });
 
             modelBuilder.Entity("API.DbModels.Payments.PaymentType", b =>
@@ -1408,7 +1413,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("globals_payments_types", (string)null);
+                    b.ToTable("globals_payments_types");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
@@ -1515,7 +1520,7 @@ namespace API.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("inventory_products", (string)null);
+                    b.ToTable("inventory_products");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.ProductImage", b =>
@@ -1559,7 +1564,7 @@ namespace API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("inventory_products_images", (string)null);
+                    b.ToTable("inventory_products_images");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.ProductPrice", b =>
@@ -1614,7 +1619,7 @@ namespace API.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("inventory_products_prices", (string)null);
+                    b.ToTable("inventory_products_prices");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.ProductStock", b =>
@@ -1668,7 +1673,7 @@ namespace API.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("inventory_products_stock", (string)null);
+                    b.ToTable("inventory_products_stock");
                 });
 
             modelBuilder.Entity("API.DbModels.Suppliers.Supplier", b =>
@@ -1739,7 +1744,7 @@ namespace API.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("inventory_supplier", (string)null);
+                    b.ToTable("inventory_supplier");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Branches.Branch", b =>
@@ -1790,7 +1795,7 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("system_branches", (string)null);
+                    b.ToTable("system_branches");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Companies.Company", b =>
@@ -1833,7 +1838,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("system_companies", (string)null);
+                    b.ToTable("system_companies");
                 });
 
             modelBuilder.Entity("API.DbModels.Users.User", b =>
@@ -1889,7 +1894,7 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("globals_users", (string)null);
+                    b.ToTable("globals_users");
                 });
 
             modelBuilder.Entity("API.DbModels.Accounts.AccountsPayable.AccountPayable", b =>
@@ -2062,7 +2067,7 @@ namespace API.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("API.DbModels.Inventory.Core.ProductTransaction", b =>
+            modelBuilder.Entity("API.DbModels.Inventory.Products.ProductTransaction", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
@@ -2072,8 +2077,12 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyId");
 
+                    b.HasOne("API.DbModels.Invoices.InvoiceDetail", null)
+                        .WithMany("ProductTransactions")
+                        .HasForeignKey("InvoiceDetailId");
+
                     b.HasOne("API.DbModels.Products.Product", "Product")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2418,6 +2427,11 @@ namespace API.Migrations
                     b.Navigation("Payments");
                 });
 
+            modelBuilder.Entity("API.DbModels.Invoices.InvoiceDetail", b =>
+                {
+                    b.Navigation("ProductTransactions");
+                });
+
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
                 {
                     b.Navigation("Contacts");
@@ -2427,6 +2441,8 @@ namespace API.Migrations
                     b.Navigation("Prices");
 
                     b.Navigation("Stocks");
+
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Companies.Company", b =>
