@@ -27,7 +27,7 @@ namespace API.Services.Sales.Invoices
         private async Task<bool> ValidateInvoiceAsync(Invoice invoice)
         {
             // validation invoice type
-            var invoiceTypeExists = await _context.InvoiceTypes.AnyAsync(d => d.Id == invoice.InvoiceTypeId);
+            var invoiceTypeExists = await _context.InvoiceTypes.AnyAsync(d => d.Id == invoice.TypeId);
             if (!invoiceTypeExists)
             {
                 throw new ValidationException("The invoice type is not valid");
@@ -41,10 +41,19 @@ namespace API.Services.Sales.Invoices
             }
 
             // validating invoice client
-            var clientExists = await _context.Clients.FindAsync(invoice.ClientId);
-            if (clientExists is null)
+            var client = await _context.Clients.FindAsync(invoice.ClientId);
+            if (client is null)
             {
                 throw new ValidationException("The client is not valid");
+            }
+
+            // validating invoice client
+            if (invoice.TypeId == (int)InvoiceTypes.Credit)
+            {
+                if (client.TypeId == (int)ClientTypes.Cash)
+                {
+                    throw new ValidationException("The client dosen't have allowed this invoice type");
+                }
             }
 
             // validate products 

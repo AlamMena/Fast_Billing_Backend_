@@ -5,7 +5,7 @@ namespace API.Dtos.Sales.Invoices
 {
     public class InvoiceDto : CoreDto
     {
-        public int InvoiceTypeId { get; set; }
+        public int TypeId { get; set; }
         public int NcfTypeId { get; set; }
         public int CreditDates { get; set; }
         public int ClientId { get; set; }
@@ -17,7 +17,7 @@ namespace API.Dtos.Sales.Invoices
         public string? Note { get; set; }
         public bool Updated { get; set; }
         public List<InvoiceDetailDto> Details { get; set; }
-        public List<PaymentDto>Payments { get; set; }
+        public List<PaymentDto> Payments { get; set; }
 
         public InvoiceDto()
         {

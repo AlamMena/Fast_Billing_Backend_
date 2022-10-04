@@ -25,9 +25,8 @@ namespace API.DbModels.Contexts
         public readonly TenantRequest tenant = null!;
         private readonly IConfiguration _configuration = null!;
 
-        public FbContext() { }
-
-        public FbContext(IConfiguration configuration)
+        public FbContext(DbContextOptions<FbContext> options, IConfiguration configuration)
+           : base(options)
         {
             _configuration = configuration;
         }
@@ -88,15 +87,14 @@ namespace API.DbModels.Contexts
         public virtual DbSet<Warehouse> Warehouses { get; set; } = null!;
 
 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB;trusted_connection=true;");
-                // optionsBuilder.UseSqlServer("Server=fastbillingdb.database.windows.net;Initial Catalog=FastBillingDB;Persist Security Info=False;User ID=fb2701;Password=FastBilling2701.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-            }
-        }
+        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // {
+        //     if (!optionsBuilder.IsConfigured)
+        //     {
+        //         optionsBuilder.UseSqlServer("Server=LAPTOP-DES11\\SQLEXPRESS;DataBase=FastBillingDB;trusted_connection=true;");
+        //         //optionsBuilder.UseSqlServer("Server=fastbillingdb.database.windows.net;Initial Catalog=FastBillingDB;Persist Security Info=False;User ID=fb2701;Password=FastBilling2701.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        //     }
+        // }
 
         private void SetTenantValue(CoreModel entity)
         {

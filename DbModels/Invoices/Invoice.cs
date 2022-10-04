@@ -11,7 +11,7 @@ namespace API.DbModels.Invoices
     [Table("sales_invoices")]
     public class Invoice : TenantModel
     {
-        public int InvoiceTypeId { get; set; }
+        public int TypeId { get; set; }
         public InvoiceType Type { get; set; } = null!;
         public string? InvoiceTypeName { get; set; }
         public int? InvoiceNumber { get; set; }
