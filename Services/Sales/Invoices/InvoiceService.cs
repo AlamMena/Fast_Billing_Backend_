@@ -2,6 +2,7 @@
 using API.DbModels.Contexts;
 using API.DbModels.Inventory.Products;
 using API.DbModels.Invoices;
+using API.DbModels.Products;
 using API.Dtos.Sales.Invoices;
 using API.Enums;
 using API.Extensions;
@@ -61,7 +62,7 @@ namespace API.Services.Sales.Invoices
             return true;
         }
 
-        private async Task<bool> ValidateInvoiceProductsAsync(IEnumerable<InvoiceDetail> details)
+        private void ValidateInvoiceProductsAsync(IEnumerable<InvoiceDetail> details, IEnumerable<Product> products)
         {
             // validating products repeated
             var productsAreRepeated = details.GroupBy(d => d.ProductId).Any(d => d.Count() > 1);
@@ -73,10 +74,6 @@ namespace API.Services.Sales.Invoices
             // selecting only the field 'productid' from invoice details request
             var invoiceRequestProductsIds = details.Select(d => d.ProductId);
 
-            // looking for products that are inside the invoice request in the database
-            var products = await _context.Products
-                .Where(d => invoiceRequestProductsIds.Contains(d.Id)).Select(d => d.Id).ToListAsync();
-
             // if the invoice doesn't contains any product that exists in the database an exception is thrown
             if (!products.Any())
             {
@@ -84,25 +81,23 @@ namespace API.Services.Sales.Invoices
             }
 
             // if the invoice request contains products that dosen't exists an exception is thrown
-            var allProductsExists = !invoiceRequestProductsIds.Except(products).Any();
+            var allProductsExists = !invoiceRequestProductsIds.Except(products.Select(d => d.Id)).Any();
             if (!allProductsExists)
             {
                 throw new ValidationException("Products are not valid");
             }
-
-            return true;
         }
         private async Task<Invoice> CalculateInvoiceAsync(Invoice invoice)
         {
-            // validating products
-            await ValidateInvoiceProductsAsync(invoice.Details);
-
             // looking for products
             var products = await _context.Products
                 .Include(d => d.Prices)
                 .Include(d => d.Stocks)
                 .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
                 .ToListAsync();
+
+            // validating products
+            ValidateInvoiceProductsAsync(invoice.Details, products);
 
             // calculating every detail
             foreach (var detail in invoice.Details)
@@ -222,21 +217,6 @@ namespace API.Services.Sales.Invoices
 
             return true;
         }
-        private async Task<bool> UpdateProductStock(Invoice invoice)
-        {
-            await _context.Products
-                 .Include(d => d.Transactions)
-                 .Include(d => d.Stocks)
-                 .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
-                 .ForEachAsync(product =>
-                 {
-                     var productStock = product.Stocks.First(d => d.WarehouseId == invoice.WareHouseId);
-                     productStock.Stock = product.Transactions.Sum(d => d.Quantity * (int)d.Sign);
-
-                 });
-            return true;
-        }
-
         public async Task<Invoice> PostInvoiceAsync(Invoice invoice)
         {
             await _context.Database.BeginTransactionAsync();
@@ -246,8 +226,6 @@ namespace API.Services.Sales.Invoices
             await SetInvoiceTypeAsync(invoice);
 
             await CalculateInvoiceAsync(invoice);
-
-            await UpdateProductStock(invoice);
 
             BuildAccountReceivableFromInvoice(invoice);
 
