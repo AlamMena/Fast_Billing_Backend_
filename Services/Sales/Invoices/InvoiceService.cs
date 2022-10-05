@@ -15,52 +15,52 @@ namespace API.Services.Sales.Invoices
     public class InvoiceService : IInvoiceService
     {
         private readonly FbContext _context;
-        private readonly IMapper _mapper;
         private readonly INcfService _ncfService;
-        public InvoiceService(FbContext context, IMapper mapper, INcfService ncfService)
+        public InvoiceService(FbContext context, INcfService ncfService)
         {
             _context = context;
-            _mapper = mapper;
             _ncfService = ncfService;
         }
 
-        private async Task<bool> ValidateInvoiceAsync(Invoice invoice)
+        private async Task<bool> SetInvoiceClientAsync(Invoice invoice)
         {
-            // validation invoice type
-            var invoiceTypeExists = await _context.InvoiceTypes.AnyAsync(d => d.Id == invoice.TypeId);
-            if (!invoiceTypeExists)
+            // client information
+            var client = await _context.Clients.Include(d => d.Addresses).FirstAsync(d => d.Id == invoice.ClientId)
+                ?? throw new ValidationException("Client is not valid");
+
+            // client information
+            invoice.Client = client;
+            invoice.ClientName = client.Name;
+            invoice.ClientEmail = client.Email;
+            invoice.ClientNoIdentification = client.NoIdentification;
+            invoice.ClientAddress = client.Addresses.FirstOrDefault(d => d.Main)?.Address;
+
+            return true;
+        }
+        public async Task<bool> SetInvoiceTypeAsync(Invoice invoice)
+        {
+            // validating type
+            var type = await _context.InvoiceTypes.FindAsync(invoice.TypeId);
+            if (type is null)
             {
                 throw new ValidationException("The invoice type is not valid");
             }
 
-            // validation ncf type
-            var ncfTypeExists = await _context.NcfTypes.AnyAsync(d => d.Id == invoice.NcfTypeId);
-            if (!invoiceTypeExists)
-            {
-                throw new ValidationException("The ncf type is not valid");
-            }
+            // setting name
+            invoice.InvoiceTypeName = type.Name;
 
-            // validating invoice client
-            var client = await _context.Clients.FindAsync(invoice.ClientId);
-            if (client is null)
-            {
-                throw new ValidationException("The client is not valid");
-            }
-
-            // validating invoice client
+            // validating that client has a type that allow credit invoice
             if (invoice.TypeId == (int)InvoiceTypes.Credit)
             {
-                if (client.TypeId == (int)ClientTypes.Cash)
+                if (invoice.Client.TypeId == (int)ClientTypes.Cash)
                 {
                     throw new ValidationException("The client dosen't have allowed this invoice type");
                 }
             }
 
-            // validate products 
-            await ValidateInvoiceProductsAsync(invoice.Details);
-
             return true;
         }
+
         private async Task<bool> ValidateInvoiceProductsAsync(IEnumerable<InvoiceDetail> details)
         {
             // validating products repeated
@@ -92,118 +92,27 @@ namespace API.Services.Sales.Invoices
 
             return true;
         }
-        private async Task<bool> SetInvoiceNcf(Invoice invoice)
-        {
-            // ncf configuration
-            var ncfResponse = await _ncfService.GetNcfAsync(invoice.NcfTypeId);
-            invoice.Ncf = ncfResponse.Ncf;
-            // invoice.NcfExpiration = ncfResponse.ExpirationDate;
-
-            // invoice ncf type name 
-            invoice.NcfName = await _context.NcfTypes
-                .Where(d => d.Id == invoice.NcfTypeId).Select(d => d.Name).FirstAsync();
-
-            return true;
-        }
-        private async Task<bool> SetProductDataToInvoiceDetailsAsync(IEnumerable<InvoiceDetail> details)
-        {
-            var productsIds = details.Select(d => d.ProductId);
-            var products = await _context.Products.Where(d => productsIds.Contains(d.Id)).ToListAsync();
-
-            // setting product name to the list
-            details.ToList()
-                .ForEach(d => d.ProductName = products.First(p => p.Id == d.ProductId).Name);
-
-            return true;
-        }
-        private async Task<bool> SetClientDataAsync(Invoice invoice)
-        {
-            // client information
-            var client = await _context.Clients.FindAsync(invoice.ClientId)
-                ?? throw new ValidationException("Client is not valid");
-
-            // client information
-            invoice.ClientName = client.Name;
-            invoice.ClientEmail = client.Email;
-            invoice.ClientNoIdentification = client.NoIdentification;
-            invoice.ClientAddress = client.Addresses.FirstOrDefault(d => d.Main)?.Address;
-
-            return true;
-        }
-        private async Task<bool> PayInvoiceAsync(Invoice invoice)
-        {
-            var client = await _context.Clients.FindAsync(invoice.ClientId);
-            if (client is null)
-            {
-                throw new ValidationException("The client is not valid");
-            }
-
-            // initial account
-            var account = new AccountReceivable
-            {
-                ClientId = invoice.ClientId,
-                ClientName = client.Name,
-                ClientDocNum = client.DocNum,
-                InitialDate = invoice.Date,
-                ExpirationDate = invoice.NcfExpiration,
-                TaxAmount = invoice.TaxAmount,
-                Amount = invoice.Total,
-                Balance = 0,
-                Document = AccountDocuments.Invoice.GetDocumentKey(),
-                Reference = invoice.DocNum,
-                Confirmed = true,
-            };
-
-            //  out transaction
-            account.Transactions.Add(new AccountReceivableTransaction()
-            {
-                Amount = invoice.Total,
-                Sign = TransactionType.Outcome,
-                Document = AccountDocuments.Invoice.GetDocumentKey(),
-                Reference = account.DocNum
-            });
-
-
-            // generating payments
-            invoice.Payments.ToList().ForEach(d =>
-            {
-                d.Id = 0;
-                d.CompanyId = _context.tenant.CompanyId;
-                d.BranchId = _context.tenant.BranchId;
-                d.Amount = invoice.Total;
-                d.Document = AccountDocuments.Invoice.GetDocumentKey();
-                d.Reference = invoice.DocNum;
-            });
-
-            // in transaction 
-            account.Transactions.Add(new AccountReceivableTransaction()
-            {
-                Amount = invoice.Total,
-                Sign = TransactionType.Income,
-                Document = AccountDocuments.Invoice.GetDocumentKey(),
-                Reference = account.DocNum
-            });
-
-            // adding account to invoice
-            invoice.AccountReceivables.Add(account);
-
-            await _context.SaveChangesAsync();
-
-            return true;
-
-        }
         private async Task<Invoice> CalculateInvoiceAsync(Invoice invoice)
         {
+            // validating products
+            await ValidateInvoiceProductsAsync(invoice.Details);
+
+            // looking for products
             var products = await _context.Products
                 .Include(d => d.Prices)
                 .Include(d => d.Stocks)
                 .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
                 .ToListAsync();
 
+            // calculating every detail
             foreach (var detail in invoice.Details)
             {
                 var product = products.First(d => d.Id == detail.ProductId);
 
+                // setting product name to invoice
+                detail.ProductName = product.Name;
+
+                // adding the product transaction by detail to track the out/in products
                 detail.ProductTransactions.Add(new ProductTransaction
                 {
                     WarehouseId = product.Stocks.First().WarehouseId,
@@ -222,6 +131,7 @@ namespace API.Services.Sales.Invoices
                     BranchId = _context.tenant.BranchId,
                 });
 
+                // calculating details
                 detail.Cost = product.Prices.First().Cost;
                 detail.Price = product.Prices.First().Price;
                 detail.Tax = product.Tax;
@@ -232,6 +142,7 @@ namespace API.Services.Sales.Invoices
                 detail.Total = (detail.Price * detail.Quantity) * (detail.Tax > 0 ? (detail.Tax / 100) : 1);
             }
 
+            // calculating header
             invoice.Subtotal = invoice.Details.Sum(d => d.Price);
             invoice.Tax = invoice.Details.Sum(d => d.Tax / 100);
             invoice.TaxAmount = invoice.Details.Sum(d => d.TaxAmount);
@@ -240,6 +151,7 @@ namespace API.Services.Sales.Invoices
             invoice.Return = invoice.TotalPayed - invoice.Total;
             invoice.Total = invoice.Details.Sum(d => d.Total);
 
+            // validating payment
             if (invoice.TotalPayed < invoice.Total)
             {
                 throw new ValidationException("Total payed is not valid");
@@ -247,37 +159,105 @@ namespace API.Services.Sales.Invoices
 
             return invoice;
         }
+
+        public void BuildAccountReceivableFromInvoice(Invoice invoice)
+        {
+            invoice.AccountReceivable = new AccountReceivable
+            {
+                ClientId = invoice.ClientId,
+                ClientName = invoice.Client.Name,
+                ClientDocNum = invoice.Client.DocNum,
+                InitialDate = invoice.Date,
+                ExpirationDate = invoice.NcfExpiration,
+                TaxAmount = invoice.TaxAmount,
+                Amount = invoice.Total,
+                Balance = 0,
+                Document = AccountDocuments.Invoice.GetDocumentKey(),
+                Reference = invoice.DocNum,
+                Confirmed = true,
+            };
+
+            invoice.AccountReceivable.Transactions.Add(new AccountReceivableTransaction()
+            {
+                Amount = invoice.Total,
+                Sign = TransactionType.Outcome,
+                Document = AccountDocuments.Invoice.GetDocumentKey(),
+            });
+
+        }
+        private void BuildPaymentFromInvoice(Invoice invoice)
+        {
+            // generating payments
+            invoice.Payments.ToList().ForEach(d =>
+            {
+                d.Id = 0;
+                d.CompanyId = _context.tenant.CompanyId;
+                d.BranchId = _context.tenant.BranchId;
+                d.Amount = invoice.Total;
+                d.Document = AccountDocuments.Invoice.GetDocumentKey();
+                d.Reference = invoice.DocNum;
+            });
+
+            // pay transaction 
+            invoice.AccountReceivable.Transactions.Add(new AccountReceivableTransaction()
+            {
+                Amount = invoice.Total,
+                Sign = TransactionType.Income,
+                Document = AccountDocuments.Invoice.GetDocumentKey(),
+            });
+        }
+
+        private async Task<bool> SetInvoiceNcfAsync(Invoice invoice)
+        {
+            var ncfType = await _context.NcfTypes.FirstOrDefaultAsync(d => d.Id == invoice.NcfTypeId);
+            if (ncfType is null)
+            {
+                throw new ValidationException("The ncf type is not valid");
+            }
+
+            invoice.NcfName = ncfType.Name;
+
+            var ncfResponse = await _ncfService.GenerateNcfAsync(invoice.NcfTypeId);
+            invoice.Ncf = ncfResponse.Ncf;
+
+            return true;
+        }
+        private async Task<bool> UpdateProductStock(Invoice invoice)
+        {
+            await _context.Products
+                 .Include(d => d.Transactions)
+                 .Include(d => d.Stocks)
+                 .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
+                 .ForEachAsync(product =>
+                 {
+                     var productStock = product.Stocks.First(d => d.WarehouseId == invoice.WareHouseId);
+                     productStock.Stock = product.Transactions.Sum(d => d.Quantity * (int)d.Sign);
+
+                 });
+            return true;
+        }
+
         public async Task<Invoice> PostInvoiceAsync(Invoice invoice)
         {
             await _context.Database.BeginTransactionAsync();
 
+            await SetInvoiceClientAsync(invoice);
 
-            // validating the request
-            await ValidateInvoiceAsync(invoice);
+            await SetInvoiceTypeAsync(invoice);
 
-            // configuring ncf
-            await SetInvoiceNcf(invoice);
-
-            // getting invoice type name
-            invoice.InvoiceTypeName = await _context.InvoiceTypes
-                .Where(d => d.Id == invoice.NcfTypeId).Select(d => d.Name).FirstAsync();
-
-            // setting product data
-            await SetProductDataToInvoiceDetailsAsync(invoice.Details);
-
-            // setting client data
-            await SetClientDataAsync(invoice);
-
-            // calculating 
             await CalculateInvoiceAsync(invoice);
 
-            // account receivable
-            await PayInvoiceAsync(invoice);
+            await UpdateProductStock(invoice);
+
+            BuildAccountReceivableFromInvoice(invoice);
+
+            BuildPaymentFromInvoice(invoice);
+
+            await SetInvoiceNcfAsync(invoice);
 
             await _context.AddAsync(invoice);
             await _context.SaveChangesAsync();
 
-            // commiting changes
             await _context.Database.CommitTransactionAsync();
 
             return invoice;

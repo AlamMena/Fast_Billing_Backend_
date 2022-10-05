@@ -6,6 +6,7 @@ namespace API.Dtos.Sales.Invoices
     public class InvoiceDto : CoreDto
     {
         public int TypeId { get; set; }
+        public int WareHouseId { get; set; }
         public int NcfTypeId { get; set; }
         public int CreditDates { get; set; }
         public int ClientId { get; set; }

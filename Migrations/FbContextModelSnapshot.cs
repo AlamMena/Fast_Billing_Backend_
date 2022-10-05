@@ -251,7 +251,9 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("InvoiceId");
+                    b.HasIndex("InvoiceId")
+                        .IsUnique()
+                        .HasFilter("[InvoiceId] IS NOT NULL");
 
                     b.ToTable("accounts_recivable");
                 });
@@ -781,7 +783,7 @@ namespace API.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("inventory_prodcuts_transactions");
+                    b.ToTable("inventory_products_transactions");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.SubCategories.SubCategory", b =>
@@ -960,6 +962,7 @@ namespace API.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("InvoiceTypeName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -976,6 +979,7 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NcfName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NcfTypeId")
@@ -1020,6 +1024,9 @@ namespace API.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("WareHouseId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("WithTax")
                         .HasColumnType("bit");
 
@@ -1036,6 +1043,8 @@ namespace API.Migrations
                     b.HasIndex("NcfTypeId");
 
                     b.HasIndex("TypeId");
+
+                    b.HasIndex("WareHouseId");
 
                     b.ToTable("sales_invoices");
                 });
@@ -1954,8 +1963,8 @@ namespace API.Migrations
                         .HasForeignKey("CompanyId");
 
                     b.HasOne("API.DbModels.Invoices.Invoice", "Invoice")
-                        .WithMany("AccountReceivables")
-                        .HasForeignKey("InvoiceId");
+                        .WithOne("AccountReceivable")
+                        .HasForeignKey("API.DbModels.AccountsReceivable.AccountReceivable", "InvoiceId");
 
                     b.Navigation("Branch");
 
@@ -2150,7 +2159,7 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("ClientCardId");
 
-                    b.HasOne("API.DbModels.Contacts.Client", "Cliente")
+                    b.HasOne("API.DbModels.Contacts.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2172,17 +2181,25 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("API.DbModels.Inventory.Warehouses.Warehouse", "WareHouse")
+                        .WithMany()
+                        .HasForeignKey("WareHouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Branch");
 
-                    b.Navigation("ClientCard");
+                    b.Navigation("Client");
 
-                    b.Navigation("Cliente");
+                    b.Navigation("ClientCard");
 
                     b.Navigation("Company");
 
                     b.Navigation("NcfType");
 
                     b.Navigation("Type");
+
+                    b.Navigation("WareHouse");
                 });
 
             modelBuilder.Entity("API.DbModels.Invoices.InvoiceDetail", b =>
@@ -2420,7 +2437,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.DbModels.Invoices.Invoice", b =>
                 {
-                    b.Navigation("AccountReceivables");
+                    b.Navigation("AccountReceivable")
+                        .IsRequired();
 
                     b.Navigation("Details");
 

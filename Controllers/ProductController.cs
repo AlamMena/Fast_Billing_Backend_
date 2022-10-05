@@ -112,6 +112,8 @@ namespace API.Controllers
             await _context.AddAsync(product);
             await _context.SaveChangesAsync();
 
+            await _context.Database.CommitTransactionAsync();
+
             var response = _mapper.Map<ProductDto>(product);
             return Created("", response);
         }

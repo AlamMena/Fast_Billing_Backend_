@@ -17,7 +17,7 @@ namespace API.Services.Sales.Ncf
         }
 
         public record NcfResponse(string Ncf, object? ExpirationDate);
-        public async Task<NcfResponse> GetNcfAsync(int type)
+        public async Task<NcfResponse> GenerateNcfAsync(int type)
         {
 
             var parameters = new List<SqlParameter>

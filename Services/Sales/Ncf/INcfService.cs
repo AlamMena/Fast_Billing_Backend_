@@ -5,7 +5,7 @@ namespace API.Services.Sales.Ncf
 {
     public interface INcfService
     {
-        Task<NcfResponse> GetNcfAsync(int type);
+        Task<NcfResponse> GenerateNcfAsync(int type);
     }
 
 }

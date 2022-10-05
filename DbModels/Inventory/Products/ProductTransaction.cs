@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Inventory.Products
 {
-    [Table("inventory_prodcuts_transactions")]
+    [Table("inventory_products_transactions")]
     public class ProductTransaction : TenantModel
     {
         public int WarehouseId { get; set; }
