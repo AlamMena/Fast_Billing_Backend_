@@ -34,7 +34,7 @@ namespace API.Controllers
             return true;
         }
 
-        [HttpGet("[controller]s/filtered")]
+        [HttpGet("[controller]s")]
         public virtual async Task<IActionResult> GetAllFilteredAsync([FromQuery] PaginatedFilteredRequest request)
         {
             var data = _context.Set<TModel>().AsQueryable();
