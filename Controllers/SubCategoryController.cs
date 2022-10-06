@@ -1,5 +1,6 @@
 ﻿using API.DbModels.Contexts;
 using API.DbModels.Inventory.SubCategories;
+using API.Dtos.Core;
 using API.Dtos.Inventory.SubCategories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -30,10 +31,11 @@ namespace API.Controllers
 
             return true;
         }
+
         [HttpGet("subcategories")]
-        public override async Task<IActionResult> GetAllAsync(int page, int limit)
+        public override async Task<IActionResult> GetAllFilteredAsync([FromQuery] PaginatedFilteredRequest request)
         {
-            return await base.GetAllAsync(page, limit);
+            return await base.GetAllFilteredAsync(request);
         }
     }
 }

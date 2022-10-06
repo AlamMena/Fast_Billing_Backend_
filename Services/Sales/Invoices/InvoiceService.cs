@@ -91,8 +91,8 @@ namespace API.Services.Sales.Invoices
         {
             // looking for products
             var products = await _context.Products
-                .Include(d => d.Prices)
-                .Include(d => d.Stocks)
+                .Include(d => d.Prices) // prices logic are defined in global querys
+                .Include(d => d.Stocks) // stocks logic are defined in global querys
                 .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
                 .ToListAsync();
 
@@ -104,27 +104,7 @@ namespace API.Services.Sales.Invoices
             {
                 var product = products.First(d => d.Id == detail.ProductId);
 
-                // setting product name to invoice
                 detail.ProductName = product.Name;
-
-                // adding the product transaction by detail to track the out/in products
-                detail.ProductTransactions.Add(new ProductTransaction
-                {
-                    WarehouseId = product.Stocks.First().WarehouseId,
-                    ProductCost = product.Prices.First().Cost,
-                    ProductPrice = product.Prices.First().Price,
-                    ProductId = product.Id,
-                    Quantity = detail.Quantity,
-                    Sign = TransactionType.Outcome,
-                    OldQuantity = 0,
-                    NewQuantity = product.Stocks.First().Stock - detail.Quantity,
-                    NewCost = product.Prices.First().Cost,
-                    Note = "N/A",
-                    Document = AccountDocuments.Invoice.GetDocumentKey(),
-                    ExpirationDate = null,
-                    CompanyId = _context.tenant.CompanyId,
-                    BranchId = _context.tenant.BranchId,
-                });
 
                 // calculating details
                 detail.Cost = product.Prices.First().Cost;

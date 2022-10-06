@@ -2,6 +2,7 @@ using API.DbModels.Contexts;
 using API.DbModels.Inventory.Brands;
 using API.Dtos.Inventory.Brands;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,5 +24,8 @@ namespace API.Controllers
             }
             return true;
         }
+
+
     }
+
 }

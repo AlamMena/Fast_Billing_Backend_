@@ -34,22 +34,46 @@ namespace API.Controllers
             return true;
         }
 
-        [HttpGet("[controller]s")]
-        public virtual async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
+        [HttpGet("[controller]s/filtered")]
+        public virtual async Task<IActionResult> GetAllFilteredAsync([FromQuery] PaginatedFilteredRequest request)
         {
+            var data = _context.Set<TModel>().AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Value))
+            {
+                data = _context.Set<TModel>().Where(d => EF.Property<string>(d, "Name").Contains(request.Value));
+            }
+
             var response = new PaginatedResponse<TDto>
             {
-                Data = await _context.Set<TModel>()
-                 .Skip((page - 1) * limit)
-                 .Take(limit)
-                 .ProjectTo<TDto>(_mapper.ConfigurationProvider)
-                 .ToListAsync(),
+                Data = await data
+                .Skip((request.Page - 1) * request.Limit)
+                .Take(request.Limit)
+                .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(),
 
-                DataQuantity = await _context.Set<TModel>().CountAsync()
+                DataQuantity = await data.CountAsync()
             };
 
             return Ok(response);
         }
+
+        // [HttpGet("[controller]s")]
+        // public virtual async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
+        // {
+        //     var response = new PaginatedResponse<TDto>
+        //     {
+        //         Data = await _context.Set<TModel>()
+        //          .Skip((page - 1) * limit)
+        //          .Take(limit)
+        //          .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+        //          .ToListAsync(),
+
+        //         DataQuantity = await _context.Set<TModel>().CountAsync()
+        //     };
+
+        //     return Ok(response);
+        // }
 
         [HttpGet("[controller]/{id}")]
         public virtual async Task<IActionResult> GetByIdAsync(int id)
