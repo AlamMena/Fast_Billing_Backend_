@@ -39,7 +39,9 @@ namespace API.Controllers
         {
             var data = _context.Set<TModel>().AsQueryable();
 
-            if (!string.IsNullOrEmpty(request.Value))
+            var modelContainsPropertyName = typeof(TModel).GetType().GetProperties().Any(d => d.Name == "Name");
+
+            if (modelContainsPropertyName && !string.IsNullOrEmpty(request.Value))
             {
                 data = _context.Set<TModel>().Where(d => EF.Property<string>(d, "Name").Contains(request.Value));
             }
