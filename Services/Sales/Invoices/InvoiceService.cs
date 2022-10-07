@@ -26,7 +26,7 @@ namespace API.Services.Sales.Invoices
         private async Task<bool> SetInvoiceClientAsync(Invoice invoice)
         {
             // client information
-            var client = await _context.Clients.Include(d => d.Addresses).FirstAsync(d => d.Id == invoice.ClientId)
+            var client = await _context.Clients.Include(d => d.Addresses).FirstOrDefaultAsync(d => d.Id == invoice.ClientId)
                 ?? throw new ValidationException("Client is not valid");
 
             // client information
@@ -107,6 +107,7 @@ namespace API.Services.Sales.Invoices
                 detail.ProductName = product.Name;
 
                 // calculating details
+                detail.Product = product;
                 detail.Cost = product.Prices.First().Cost;
                 detail.Price = product.Prices.First().Price;
                 detail.Tax = product.Tax;
@@ -126,11 +127,7 @@ namespace API.Services.Sales.Invoices
             invoice.Return = invoice.TotalPayed - invoice.Total;
             invoice.Total = invoice.Details.Sum(d => d.Total);
 
-            // validating payment
-            if (invoice.TotalPayed < invoice.Total)
-            {
-                throw new ValidationException("Total payed is not valid");
-            }
+
 
             return invoice;
         }
@@ -146,7 +143,7 @@ namespace API.Services.Sales.Invoices
                 ExpirationDate = invoice.NcfExpiration,
                 TaxAmount = invoice.TaxAmount,
                 Amount = invoice.Total,
-                Balance = 0,
+                Balance = invoice.Total,
                 Document = AccountDocuments.Invoice.GetDocumentKey(),
                 Reference = invoice.DocNum,
                 Confirmed = true,
@@ -155,31 +152,44 @@ namespace API.Services.Sales.Invoices
             invoice.AccountReceivable.Transactions.Add(new AccountReceivableTransaction()
             {
                 Amount = invoice.Total,
-                Sign = TransactionType.Outcome,
+                Sign = TransactionType.Income,
                 Document = AccountDocuments.Invoice.GetDocumentKey(),
             });
 
         }
         private void BuildPaymentFromInvoice(Invoice invoice)
         {
-            // generating payments
-            invoice.Payments.ToList().ForEach(d =>
+            // validating payment
+            if (invoice.TotalPayed < invoice.Total && invoice.TypeId == (int)InvoiceTypes.Cash)
             {
-                d.Id = 0;
-                d.CompanyId = _context.tenant.CompanyId;
-                d.BranchId = _context.tenant.BranchId;
-                d.Amount = invoice.Total;
-                d.Document = AccountDocuments.Invoice.GetDocumentKey();
-                d.Reference = invoice.DocNum;
-            });
+                throw new ValidationException("Total payed is not valid");
+            }
 
-            // pay transaction 
-            invoice.AccountReceivable.Transactions.Add(new AccountReceivableTransaction()
+            if (invoice.TotalPayed > 0)
             {
-                Amount = invoice.Total,
-                Sign = TransactionType.Income,
-                Document = AccountDocuments.Invoice.GetDocumentKey(),
-            });
+                // generating payments
+                invoice.Payments.ToList().ForEach(d =>
+                {
+                    d.Id = 0;
+                    d.CompanyId = _context.tenant.CompanyId;
+                    d.BranchId = _context.tenant.BranchId;
+                    d.Amount = invoice.TotalPayed >= invoice.Total ? invoice.Total : d.Amount;
+                    d.Document = AccountDocuments.Invoice.GetDocumentKey();
+                    d.Reference = invoice.DocNum;
+                });
+
+                // pay transaction 
+                invoice.AccountReceivable.Transactions.Add(new AccountReceivableTransaction()
+                {
+                    Amount = invoice.TotalPayed >= invoice.Total ? invoice.Total : invoice.TotalPayed,
+                    Sign = TransactionType.Outcome,
+                    Document = AccountDocuments.Invoice.GetDocumentKey(),
+                });
+            }
+
+            // update account balance
+            invoice.AccountReceivable.Balance = invoice.AccountReceivable.Transactions.Sum(d => (int)d.Sign * d.Amount);
+
         }
 
         private async Task<bool> SetInvoiceNcfAsync(Invoice invoice)
@@ -194,6 +204,38 @@ namespace API.Services.Sales.Invoices
 
             var ncfResponse = await _ncfService.GenerateNcfAsync(invoice.NcfTypeId);
             invoice.Ncf = ncfResponse.Ncf;
+
+            return true;
+        }
+        public async Task<bool> UpdateStockAsync(Invoice invoice)
+        {
+            foreach (var detail in invoice.Details)
+            {
+                await _context.AddAsync(new ProductTransaction
+                {
+                    WarehouseId = invoice.WareHouseId,
+                    ProductCost = detail.Cost,
+                    ProductPrice = detail.Price,
+                    Quantity = detail.Quantity,
+                    ProductId = detail.ProductId,
+                    Sign = TransactionType.Outcome,
+                    OldQuantity = 0,
+                    NewQuantity = detail.Quantity,
+                    NewCost = detail.Cost,
+                    Note = "N/A",
+                    Document = AccountDocuments.Invoice.GetDocumentKey(),
+                    ExpirationDate = null,
+                    CompanyId = _context.tenant.CompanyId,
+                    BranchId = _context.tenant.BranchId,
+                });
+
+            }
+            /// updating stock
+            await _context.Products
+                .Include(d => d.Stocks.Where(d => d.WarehouseId == invoice.WareHouseId))
+                .Include(d => d.Transactions)
+                .Where(d => invoice.Details.Select(d => d.ProductId).Contains(d.Id))
+                .ForEachAsync(d => d.Stocks.First().Stock = d.Transactions.Sum(d => (int)d.Sign * d.Quantity));
 
             return true;
         }
@@ -212,6 +254,8 @@ namespace API.Services.Sales.Invoices
             BuildPaymentFromInvoice(invoice);
 
             await SetInvoiceNcfAsync(invoice);
+
+            await UpdateStockAsync(invoice);
 
             await _context.AddAsync(invoice);
             await _context.SaveChangesAsync();

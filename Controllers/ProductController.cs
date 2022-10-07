@@ -103,7 +103,7 @@ namespace API.Controllers
                 NewQuantity = request.Stock,
                 NewCost = request.Cost,
                 Note = "Initial transaction",
-                Document = "IT",
+                Document = "INITIAL TRANSACTION",
                 ExpirationDate = null,
                 CompanyId = _context.tenant.CompanyId,
                 BranchId = _context.tenant.BranchId,
