@@ -620,3 +620,7 @@ C:\Users\extamena\Desktop\App_FReact\Fb-Backend\obj\Debug\net6.0\refint\API.dll
 C:\Users\extamena\Desktop\App_FReact\Fb-Backend\obj\Debug\net6.0\API.pdb
 C:\Users\extamena\Desktop\App_FReact\Fb-Backend\obj\Debug\net6.0\API.genruntimeconfig.cache
 C:\Users\extamena\Desktop\App_FReact\Fb-Backend\obj\Debug\net6.0\ref\API.dll
+C:\Users\extamena\Desktop\App_FReact\Fb-Backend\bin\Debug\net6.0\thunder-tests\thunderActivity.json
+C:\Users\extamena\Desktop\App_FReact\Fb-Backend\bin\Debug\net6.0\thunder-tests\thunderclient.json
+C:\Users\extamena\Desktop\App_FReact\Fb-Backend\bin\Debug\net6.0\thunder-tests\thunderCollection.json
+C:\Users\extamena\Desktop\App_FReact\Fb-Backend\bin\Debug\net6.0\thunder-tests\thunderEnvironment.json
