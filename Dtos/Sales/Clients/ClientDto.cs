@@ -13,14 +13,14 @@ namespace API.Dtos.Sales.Clients
         public int CreditDays { get; set; }
         public bool AllowDisccount { get; set; }
         public decimal Disccount { get; set; }
-        public ICollection<ClientAddressesDto> Addresses { get; set; }
-        public ICollection<ClientContactDto> Contacts { get; set; }
+        public List<AddressDto> Addresses { get; set; }
+        public List<ContactDto> Contacts { get; set; }
         // public ICollection<ClientCard> Cards { get; set; }
 
         public ClientDto()
         {
-            Addresses = new List<ClientAddressesDto>();
-            Contacts = new List<ClientContactDto>();
+            Addresses = new List<AddressDto>();
+            Contacts = new List<ContactDto>();
         }
     }
 }

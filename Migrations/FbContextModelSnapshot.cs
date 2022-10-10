@@ -39,6 +39,9 @@ namespace API.Migrations
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("bit");
+
                     b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
@@ -58,6 +61,10 @@ namespace API.Migrations
                     b.Property<int>("DocNum")
                         .HasColumnType("int");
 
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
@@ -66,9 +73,6 @@ namespace API.Migrations
 
                     b.Property<string>("Ncf")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NcfTypeId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Reference")
                         .HasColumnType("int");
@@ -111,8 +115,6 @@ namespace API.Migrations
                     b.HasIndex("BranchId");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("NcfTypeId");
 
                     b.HasIndex("SupplierId");
 
@@ -380,60 +382,6 @@ namespace API.Migrations
                     b.ToTable("sales_clients");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ClientAddresses", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Main")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Province")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("sales_clients_addresses");
-                });
-
             modelBuilder.Entity("API.DbModels.Contacts.ClientCard", b =>
                 {
                     b.Property<int>("Id")
@@ -479,47 +427,6 @@ namespace API.Migrations
                     b.ToTable("sales_clients_cards");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ClientContacts", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UpdatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("sales_clients_contacts");
-                });
-
             modelBuilder.Entity("API.DbModels.Contacts.ClientType", b =>
                 {
                     b.Property<int>("Id")
@@ -553,6 +460,122 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("sales_clients_types");
+                });
+
+            modelBuilder.Entity("API.DbModels.Core.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Main")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Province")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("globals_addresses");
+                });
+
+            modelBuilder.Entity("API.DbModels.Core.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Main")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("globals_contacts");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Brands.Brand", b =>
@@ -690,6 +713,273 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("system_currency");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.GoodsReceipt.GoodReceipt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Applied")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Days")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("DocNum")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IncludeTaxes")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("InvoiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InvoiceExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InvoiceNcf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Ncf")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NcfName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NcfTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroFactura")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Return")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("SellerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("SupplierAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierNoIdentification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TotalCharge")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TotalDiscount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TotalPayed")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TotalTax")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TypedDiscount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TypedSubtotal")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TypedTotal")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TypedTotalCharge")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TypedTotalTax")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<bool>("UpdateCost")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("UpdatePrice")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("NcfTypeId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("inventory_goods_receipt");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.GoodsReceipt.GoodReceiptDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("BuyUnity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Empaque")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<bool>("Excent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Exento")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("GoodReceiptId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("MarginBenefit")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("OldCost")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("OldPrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("SellUnity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Tax")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoodReceiptId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("inventory_goods_receipt_details");
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Products.ProductTransaction", b =>
@@ -1354,19 +1644,22 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("GoodReceiptId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("InvoiceId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PaymentTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Reference")
                         .HasColumnType("int");
 
                     b.Property<int>("ReferenceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("UpdatedBy")
@@ -1383,9 +1676,11 @@ namespace API.Migrations
 
                     b.HasIndex("CompanyId");
 
+                    b.HasIndex("GoodReceiptId");
+
                     b.HasIndex("InvoiceId");
 
-                    b.HasIndex("PaymentTypeId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("globals_payments");
                 });
@@ -1708,18 +2003,22 @@ namespace API.Migrations
                     b.Property<int>("CurrencyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Descripcion")
+                    b.Property<int?>("DaysToPay")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Descripction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Descuento")
+                    b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,4)");
-
-                    b.Property<int?>("Dias")
-                        .HasColumnType("int");
 
                     b.Property<int>("DocNum")
                         .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1753,7 +2052,7 @@ namespace API.Migrations
 
                     b.HasIndex("CurrencyId");
 
-                    b.ToTable("inventory_supplier");
+                    b.ToTable("inventory_suppliers");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Branches.Branch", b =>
@@ -1910,27 +2209,22 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.HasOne("API.DbModels.Ncf.NcfType", "NcfType")
-                        .WithMany()
-                        .HasForeignKey("NcfTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Suppliers.Supplier", "Supplier")
                         .WithMany()
-                        .HasForeignKey("SupplierId");
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
                     b.Navigation("Company");
-
-                    b.Navigation("NcfType");
 
                     b.Navigation("Supplier");
                 });
@@ -1940,7 +2234,7 @@ namespace API.Migrations
                     b.HasOne("API.DbModels.Accounts.AccountsPayable.AccountPayable", "AccountPayable")
                         .WithMany("Transactions")
                         .HasForeignKey("AccountPayableId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AccountPayable");
@@ -1950,21 +2244,24 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Contacts.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Invoices.Invoice", "Invoice")
                         .WithOne("AccountReceivable")
-                        .HasForeignKey("API.DbModels.AccountsReceivable.AccountReceivable", "InvoiceId");
+                        .HasForeignKey("API.DbModels.AccountsReceivable.AccountReceivable", "InvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
@@ -1980,7 +2277,7 @@ namespace API.Migrations
                     b.HasOne("API.DbModels.AccountsReceivable.AccountReceivable", "Account")
                         .WithMany("Transactions")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -1990,20 +2287,23 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Products.Product", null)
                         .WithMany("Contacts")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Contacts.ClientType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Branch");
@@ -2013,48 +2313,54 @@ namespace API.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ClientAddresses", b =>
-                {
-                    b.HasOne("API.DbModels.Contacts.Client", "Client")
-                        .WithMany("Addresses")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("API.DbModels.Contacts.ClientCard", b =>
                 {
                     b.HasOne("API.DbModels.Contacts.Client", "Client")
                         .WithMany("Cards")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("API.DbModels.Contacts.ClientContacts", b =>
+            modelBuilder.Entity("API.DbModels.Core.Address", b =>
                 {
-                    b.HasOne("API.DbModels.Contacts.Client", "Client")
+                    b.HasOne("API.DbModels.Contacts.Client", null)
+                        .WithMany("Addresses")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("API.DbModels.Suppliers.Supplier", null)
+                        .WithMany("Addresses")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("API.DbModels.Core.Contact", b =>
+                {
+                    b.HasOne("API.DbModels.Contacts.Client", null)
                         .WithMany("Contacts")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Client");
+                    b.HasOne("API.DbModels.Suppliers.Supplier", null)
+                        .WithMany("Contacts")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("API.DbModels.Inventory.Brands.Brand", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
@@ -2065,41 +2371,122 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("API.DbModels.Inventory.Products.ProductTransaction", b =>
+            modelBuilder.Entity("API.DbModels.Inventory.GoodsReceipt.GoodReceipt", b =>
                 {
+                    b.HasOne("API.DbModels.Accounts.AccountsPayable.AccountPayable", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("API.DbModels.Invoices.InvoiceDetail", null)
-                        .WithMany("ProductTransactions")
-                        .HasForeignKey("InvoiceDetailId");
+                    b.HasOne("API.DbModels.Ncf.NcfType", "NcfType")
+                        .WithMany()
+                        .HasForeignKey("NcfTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("API.DbModels.Products.Product", "Product")
-                        .WithMany("Transactions")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("API.DbModels.Suppliers.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.Inventory.Warehouses.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("NcfType");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.GoodsReceipt.GoodReceiptDetail", b =>
+                {
+                    b.HasOne("API.DbModels.Inventory.GoodsReceipt.GoodReceipt", "GoodReceipt")
+                        .WithMany("Details")
+                        .HasForeignKey("GoodReceiptId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.Inventory.Warehouses.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GoodReceipt");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.Products.ProductTransaction", b =>
+                {
+                    b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("API.DbModels.System.Companies.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("API.DbModels.Invoices.InvoiceDetail", null)
+                        .WithMany("ProductTransactions")
+                        .HasForeignKey("InvoiceDetailId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("API.DbModels.Products.Product", "Product")
+                        .WithMany("Transactions")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("API.DbModels.Inventory.Warehouses.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Branch");
@@ -2115,17 +2502,19 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Inventory.Categories.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
@@ -2138,11 +2527,13 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
@@ -2153,38 +2544,41 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Contacts.ClientCard", "ClientCard")
                         .WithMany()
-                        .HasForeignKey("ClientCardId");
+                        .HasForeignKey("ClientCardId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Contacts.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Ncf.NcfType", "NcfType")
                         .WithMany()
                         .HasForeignKey("NcfTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.Invoices.InvoiceType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.Inventory.Warehouses.Warehouse", "WareHouse")
                         .WithMany()
                         .HasForeignKey("WareHouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Branch");
@@ -2207,13 +2601,13 @@ namespace API.Migrations
                     b.HasOne("API.DbModels.Invoices.Invoice", "Invoice")
                         .WithMany("Details")
                         .HasForeignKey("InvoiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Invoice");
@@ -2225,16 +2619,18 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Ncf.NcfType", "NCFType")
                         .WithMany()
                         .HasForeignKey("NCFTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Branch");
@@ -2248,24 +2644,33 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.Payments.Bank", "Bank")
                         .WithMany()
-                        .HasForeignKey("BankId");
+                        .HasForeignKey("BankId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("API.DbModels.Inventory.GoodsReceipt.GoodReceipt", null)
+                        .WithMany("Payments")
+                        .HasForeignKey("GoodReceiptId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Invoices.Invoice", null)
                         .WithMany("Payments")
-                        .HasForeignKey("InvoiceId");
+                        .HasForeignKey("InvoiceId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("API.DbModels.Payments.PaymentType", "PaymentType")
+                    b.HasOne("API.DbModels.Payments.PaymentType", "Type")
                         .WithMany()
-                        .HasForeignKey("PaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Bank");
@@ -2274,30 +2679,35 @@ namespace API.Migrations
 
                     b.Navigation("Company");
 
-                    b.Navigation("PaymentType");
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("API.DbModels.Products.Product", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Inventory.Brands.Brand", "Brand")
                         .WithMany()
-                        .HasForeignKey("BrandId");
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Inventory.Categories.Category", "Categoria")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Inventory.SubCategories.SubCategory", "SubCategory")
                         .WithMany()
-                        .HasForeignKey("SubCategoryId");
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
@@ -2314,23 +2724,26 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.Products.Product", null)
                         .WithMany("Images")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("API.DbModels.Products.ProductPrice", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Products.Product", "Producto")
                         .WithMany("Prices")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Branch");
@@ -2344,22 +2757,24 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Products.Product", "Producto")
                         .WithMany("Stocks")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.DbModels.Inventory.Warehouses.Warehouse", "Warehouse")
                         .WithMany()
                         .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Branch");
@@ -2375,16 +2790,18 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.Inventory.Currencies.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Branch");
@@ -2398,18 +2815,21 @@ namespace API.Migrations
                 {
                     b.HasOne("API.DbModels.System.Companies.Company", null)
                         .WithMany("Branches")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("API.DbModels.Users.User", b =>
                 {
                     b.HasOne("API.DbModels.System.Branches.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("API.DbModels.System.Companies.Company", "Company")
                         .WithMany("Users")
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
 
@@ -2433,6 +2853,13 @@ namespace API.Migrations
                     b.Navigation("Cards");
 
                     b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("API.DbModels.Inventory.GoodsReceipt.GoodReceipt", b =>
+                {
+                    b.Navigation("Details");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("API.DbModels.Invoices.Invoice", b =>
@@ -2461,6 +2888,13 @@ namespace API.Migrations
                     b.Navigation("Stocks");
 
                     b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("API.DbModels.Suppliers.Supplier", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Contacts");
                 });
 
             modelBuilder.Entity("API.DbModels.System.Companies.Company", b =>

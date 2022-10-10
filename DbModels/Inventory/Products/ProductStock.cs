@@ -1,4 +1,5 @@
 ﻿using API.DbModels.Core;
+using API.DbModels.Inventory.Products;
 using API.DbModels.Inventory.Warehouses;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,6 +13,11 @@ namespace API.DbModels.Products
         public virtual Warehouse Warehouse { get; set; } = null!;
         public int ProductId { get; set; }
         public Product Producto { get; set; } = null!;
+        public ICollection<ProductTransaction> Transactions { get; set; }
+        public ProductStock()
+        {
+            Transactions = new HashSet<ProductTransaction>();
+        }
 
     }
 }

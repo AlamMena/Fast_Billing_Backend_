@@ -1,6 +1,7 @@
 ﻿using API.DbModels.Core;
 using API.DbModels.Ncf;
 using API.DbModels.Suppliers;
+using API.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Accounts.AccountsPayable
@@ -8,11 +9,10 @@ namespace API.DbModels.Accounts.AccountsPayable
     [Table("accounts_payable")]
     public class AccountPayable : TenantModel
     {
-        public int NcfTypeId { get; set; }
-        public NcfType? NcfType { get; set; }
         public string? Ncf { get; set; }
         public DateTime Date { get; set; }
         public DateTime ExpirationDate { get; set; }
+        public string Document { get; set; } = null!;
         public int Reference { get; set; }
         public int? SupplierId { get; set; }
         public Supplier? Supplier { get; set; }
@@ -30,6 +30,7 @@ namespace API.DbModels.Accounts.AccountsPayable
         public decimal TaxAmount { get; set; }
         public decimal Total { get; set; }
         public decimal Balance { get; set; }
+        public bool Confirmed { get; set; }
         public ICollection<AccountPaybleTransaction> Transactions { get; set; }
 
         public AccountPayable()

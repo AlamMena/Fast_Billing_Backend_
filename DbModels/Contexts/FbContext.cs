@@ -17,6 +17,8 @@ using API.DbModels.Inventory.Warehouses;
 using API.Enums;
 using API.DbModels.Payments;
 using API.DbModels.Inventory.Products;
+using API.DbModels.Suppliers;
+using API.DbModels.Inventory.GoodsReceipt;
 
 namespace API.DbModels.Contexts
 {
@@ -53,18 +55,23 @@ namespace API.DbModels.Contexts
         public virtual DbSet<ProductStock> ProductStocks { get; set; } = null!;
         public virtual DbSet<ProductTransaction> ProductTransactions { get; set; } = null!;
 
-        // ----- contacts -----
+        // ----- clients -----
         public virtual DbSet<Client> Clients { get; set; } = null!;
-        public virtual DbSet<ClientAddresses> ClientAddresses { get; set; } = null!;
         public virtual DbSet<ClientCard> ClientCards { get; set; } = null!;
-        public virtual DbSet<ClientContacts> ClientContacts { get; set; } = null!;
         public virtual DbSet<ClientType> ClientTypes { get; set; } = null!;
+
+        // ----- clients -----
+        public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
 
 
         // ----- invoices -----
         public virtual DbSet<Invoice> Invoices { get; set; } = null!;
         public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; } = null!;
         public virtual DbSet<InvoiceType> InvoiceTypes { get; set; } = null!;
+
+        // ----- good receipt -----
+        public virtual DbSet<GoodReceipt> GoodReceipts { get; set; } = null!;
+        public virtual DbSet<GoodReceiptDetail> Details { get; set; } = null!;
 
         // ---- accounts -----
 
@@ -148,6 +155,12 @@ namespace API.DbModels.Contexts
             SetQueryFilters(modelBuilder);
 
             SetPrecision(modelBuilder);
+
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
 
             // .HasForeignKey(d => d.ReferenceId);
             //modelBuilder.Entity<AccountsReceivable>().HasDiscriminator<Invoice>("value").HasValue<int>(0);

@@ -11,8 +11,8 @@ namespace API.DbModels.Payments
         public int? CardNumber { get; set; }
         public int? BankId { get; set; }
         public Bank? Bank { get; set; }
-        public int PaymentTypeId { get; set; }
-        public PaymentType PaymentType { get; set; } = null!;
+        public int TypeId { get; set; }
+        public PaymentType Type { get; set; } = null!;
         public string Document { get; set; } = null!;
         public int Reference { get; set; }
         public int ReferenceId { get; set; }

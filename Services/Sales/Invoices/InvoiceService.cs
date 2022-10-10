@@ -34,7 +34,7 @@ namespace API.Services.Sales.Invoices
             invoice.ClientName = client.Name;
             invoice.ClientEmail = client.Email;
             invoice.ClientNoIdentification = client.NoIdentification;
-            invoice.ClientAddress = client.Addresses.FirstOrDefault(d => d.Main)?.Address;
+            invoice.ClientAddress = client.Addresses.FirstOrDefault(d => d.Main)?.Address1;
 
             return true;
         }
@@ -62,7 +62,7 @@ namespace API.Services.Sales.Invoices
             return true;
         }
 
-        private void ValidateInvoiceProductsAsync(IEnumerable<InvoiceDetail> details, IEnumerable<Product> products)
+        private static void ValidateInvoiceProductsAsync(IEnumerable<InvoiceDetail> details, IEnumerable<Product> products)
         {
             // validating products repeated
             var productsAreRepeated = details.GroupBy(d => d.ProductId).Any(d => d.Count() > 1);
@@ -157,7 +157,7 @@ namespace API.Services.Sales.Invoices
             });
 
         }
-        private void BuildPaymentFromInvoice(Invoice invoice)
+        private async Task<bool> BuildPaymentFromInvoice(Invoice invoice)
         {
             // validating payment
             if (invoice.TotalPayed < invoice.Total && invoice.TypeId == (int)InvoiceTypes.Cash)
@@ -165,18 +165,26 @@ namespace API.Services.Sales.Invoices
                 throw new ValidationException("Total payed is not valid");
             }
 
+            var paymentTypes = await _context.PaymentTypes.ToListAsync();
+
             if (invoice.TotalPayed > 0)
             {
                 // generating payments
-                invoice.Payments.ToList().ForEach(d =>
+                foreach (var payment in invoice.Payments)
                 {
-                    d.Id = 0;
-                    d.CompanyId = _context.tenant.CompanyId;
-                    d.BranchId = _context.tenant.BranchId;
-                    d.Amount = invoice.TotalPayed >= invoice.Total ? invoice.Total : d.Amount;
-                    d.Document = AccountDocuments.Invoice.GetDocumentKey();
-                    d.Reference = invoice.DocNum;
-                });
+                    if (paymentTypes.Any(d => d.Id == payment.TypeId) is not true)
+                    {
+                        throw new ValidationException("The payment type is not valid");
+                    }
+
+                    payment.Id = 0;
+                    payment.BankId = null;
+                    payment.CompanyId = _context.tenant.CompanyId;
+                    payment.BranchId = _context.tenant.BranchId;
+                    payment.Amount = invoice.TotalPayed >= invoice.Total ? invoice.Total : payment.Amount;
+                    payment.Document = AccountDocuments.Invoice.GetDocumentKey();
+                    payment.Reference = invoice.DocNum;
+                }
 
                 // pay transaction 
                 invoice.AccountReceivable.Transactions.Add(new AccountReceivableTransaction()
@@ -190,6 +198,7 @@ namespace API.Services.Sales.Invoices
             // update account balance
             invoice.AccountReceivable.Balance = invoice.AccountReceivable.Transactions.Sum(d => (int)d.Sign * d.Amount);
 
+            return true;
         }
 
         private async Task<bool> SetInvoiceNcfAsync(Invoice invoice)
@@ -230,7 +239,7 @@ namespace API.Services.Sales.Invoices
                 });
 
             }
-            /// updating stock
+            // updating stock
             await _context.Products
                 .Include(d => d.Stocks.Where(d => d.WarehouseId == invoice.WareHouseId))
                 .Include(d => d.Transactions)
@@ -251,7 +260,7 @@ namespace API.Services.Sales.Invoices
 
             BuildAccountReceivableFromInvoice(invoice);
 
-            BuildPaymentFromInvoice(invoice);
+            await BuildPaymentFromInvoice(invoice);
 
             await SetInvoiceNcfAsync(invoice);
 

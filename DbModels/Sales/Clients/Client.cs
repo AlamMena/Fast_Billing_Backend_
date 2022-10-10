@@ -16,17 +16,17 @@ namespace API.DbModels.Contacts
         public int CreditDays { get; set; }
         public bool AllowDiscount { get; set; }
         public decimal Discount { get; set; }
-        public ICollection<ClientAddresses> Addresses { get; set; }
+        public ICollection<Address> Addresses { get; set; }
         public ICollection<ClientCard> Cards { get; set; }
-        public ICollection<ClientContacts> Contacts { get; set; }
+        public ICollection<Contact> Contacts { get; set; }
         //public ICollection<CuentaPorCobrar> CuentasPorCobrar { get; set; }
         //public ICollection<Factura> Facturas { get; set; }
 
         public Client()
         {
-            Addresses = new HashSet<ClientAddresses>();
+            Addresses = new HashSet<Address>();
             Cards = new HashSet<ClientCard>();
-            Contacts = new HashSet<ClientContacts>();
+            Contacts = new HashSet<Contact>();
 
             //Facturas = new HashSet<Factura>();
             //CuentasPorCobrar = new HashSet<CuentaPorCobrar>();

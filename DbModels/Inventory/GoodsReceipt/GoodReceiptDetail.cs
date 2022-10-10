@@ -16,8 +16,9 @@ namespace API.DbModels.Inventory.GoodsReceipt
         public decimal MarginBenefit { get; set; }
         public decimal Price { get; set; }
         public decimal Cost { get; set; }
-        public decimal Disccount { get; set; }
-        public decimal DisccountAmount { get; set; }
+        public decimal Discount { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public bool Excent { get; set; } 
         public decimal Tax { get; set; }
         public decimal TaxAmount { get; set; }
         public decimal Total { get; set; }

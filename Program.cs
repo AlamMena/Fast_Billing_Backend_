@@ -8,6 +8,7 @@ using API.Services.Sales.Invoices;
 using API.Services.Users;
 using API.Swagger;
 using Microsoft.OpenApi.Models;
+using API.Services.Inventory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserManagement, UserManagement>();
 builder.Services.AddScoped<INcfService, NcfService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+builder.Services.AddScoped<IGoodReceiptService, GoodReceiptService>();
 
 
 // lib services
