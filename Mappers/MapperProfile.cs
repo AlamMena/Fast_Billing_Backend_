@@ -1,4 +1,5 @@
 using API.DbModels.Contacts;
+using API.DbModels.Core;
 using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
 using API.DbModels.Inventory.GoodsReceipt;
@@ -71,6 +72,7 @@ namespace API.Mappers
             // client
             CreateMap<Client, ClientDto>().ReverseMap();
             CreateMap<TypeDto, ClientType>().ReverseMap();
+            CreateMap<Address, AddressDto>().ReverseMap();
 
             // supplier 
             CreateMap<Supplier, SupplierDto>();
