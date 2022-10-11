@@ -4,11 +4,24 @@
     "colId": "f7bccb7e-0932-418e-b46a-065970d7ed5a",
     "containerId": "",
     "name": "GetToken",
-    "url": "",
-    "method": "GET",
+    "url": "https://localhost:7068/api/users/token?mail=testuser@gmail.com&password=1234567",
+    "method": "POST",
     "sortNum": 10000,
     "created": "2022-10-10T21:10:50.449Z",
-    "modified": "2022-10-10T21:10:50.449Z",
-    "headers": []
+    "modified": "2022-10-10T21:11:48.520Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "mail",
+        "value": "testuser@gmail.com",
+        "isPath": false
+      },
+      {
+        "name": "password",
+        "value": "1234567",
+        "isPath": false
+      }
+    ],
+    "tests": []
   }
 ]
