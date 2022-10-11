@@ -72,7 +72,11 @@ namespace API.Mappers
             // client
             CreateMap<Client, ClientDto>().ReverseMap();
             CreateMap<TypeDto, ClientType>().ReverseMap();
+
+            // global
             CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<Contact, ContactDto>().ReverseMap();
+
 
             // supplier 
             CreateMap<Supplier, SupplierDto>();
