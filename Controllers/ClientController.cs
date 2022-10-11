@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using API.DbModels.Contacts;
 using API.DbModels.Contexts;
 using API.Dtos.Core;
@@ -16,11 +17,35 @@ namespace API.Controllers
         {
         }
 
+        protected override async Task<bool> ValidateAsync(Client request)
+        {
+            var noIdentificationExists = await _context.Clients
+                .AnyAsync(d => d.NoIdentification == request.NoIdentification && d.Id != request.Id);
+
+            if (noIdentificationExists)
+            {
+                throw new ValidationException("The client identifaction is not valid");
+            }
+            return true;
+        }
+
         [HttpGet("clients/types")]
         public async Task<IActionResult> GetClientsTypesAsync()
         {
-           var response =  await _context.ClientTypes
-                    .ProjectTo<TypeDto>(_mapper.ConfigurationProvider).ToListAsync();
+            var response = await _context.ClientTypes
+                     .ProjectTo<TypeDto>(_mapper.ConfigurationProvider).ToListAsync();
+
+            return Ok(response);
+        }
+
+        [HttpGet("client/{id}")]
+        public override async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var response = await _context.Clients
+                .Include(d => d.Contacts)
+                .Include(d => d.Addresses)
+                .ProjectTo<ClientDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(d => d.Id == id);
 
             return Ok(response);
         }

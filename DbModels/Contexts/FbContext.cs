@@ -106,7 +106,7 @@ namespace API.DbModels.Contexts
         private void SetTenantValue(CoreModel entity)
         {
             var companyIdField = entity.GetType().GetProperty("CompanyId");
-            var branchIdField = entity.GetType().GetProperty("branchId");
+            var branchIdField = entity.GetType().GetProperty("BranchId");
 
             if (companyIdField is not null)
             {
@@ -115,11 +115,11 @@ namespace API.DbModels.Contexts
                     entity.GetType()?.GetProperty("CompanyId")?.SetValue(entity, tenant.CompanyId);
                 }
             }
-            else if (branchIdField is not null)
+            if (branchIdField is not null)
             {
                 if (branchIdField.GetValue(entity) is null)
                 {
-                    entity.GetType()?.GetProperty("branchId")?.SetValue(entity, tenant.BranchId);
+                    entity.GetType()?.GetProperty("BranchId")?.SetValue(entity, tenant.BranchId);
                 }
             }
         }

@@ -79,7 +79,7 @@ namespace API.Mappers
 
 
             // supplier 
-            CreateMap<Supplier, SupplierDto>();
+            CreateMap<Supplier, SupplierDto>().ReverseMap();
 
             // payments 
             CreateMap<Payment, PaymentDto>().ReverseMap();

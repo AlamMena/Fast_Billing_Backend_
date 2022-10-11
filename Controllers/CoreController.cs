@@ -119,9 +119,9 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            await ValidateAsync(dbEntity);
-
             _mapper.Map(request, dbEntity);
+
+            await ValidateAsync(dbEntity);
 
             await _context.SaveChangesAsync();
 

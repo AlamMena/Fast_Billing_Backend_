@@ -7,7 +7,7 @@ namespace API.DbModels.Core
     {
         public string Name { get; set; } = null!;
         public string Address1 { get; set; } = null!;
-        public string Address2 { get; set; } = null!;
+        public string? Address2 { get; set; }
         public string? PostalCode { get; set; }
         public string Country { get; set; } = null!;
         public string? Province { get; set; }

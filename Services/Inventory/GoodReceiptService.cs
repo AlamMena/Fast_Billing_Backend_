@@ -29,7 +29,7 @@ namespace API.Services.Inventory
 
             if (supplier is null)
             {
-                throw new ValidationException("The supplier is not null");
+                throw new ValidationException("The supplier is not valid");
             }
 
             receipt.SupplierName = supplier.Name;
