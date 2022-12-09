@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "f7bccb7e-0932-418e-b46a-065970d7ed5a",
+    "colName": "Users",
+    "created": "2022-10-10T21:10:42.748Z",
+    "sortNum": 10000,
+    "folders": []
+  },
+  {
+    "_id": "7d18b3b3-d9e3-439e-b837-3c384424061c",
+    "colName": "GoodReceipt",
+    "created": "2022-10-11T12:27:17.752Z",
+    "sortNum": 20000,
+    "folders": []
+  },
+  {
+    "_id": "ff73a633-a468-4da0-b3ea-cc4418e2ed59",
+    "colName": "Suppliers",
+    "created": "2022-10-11T12:29:26.168Z",
+    "sortNum": 30000,
+    "folders": []
+  }
+]

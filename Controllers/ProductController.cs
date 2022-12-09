@@ -156,5 +156,21 @@ namespace API.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("product/{id}")]
+        public virtual async Task<IActionResult> GetByIdAsync(int id)
+        {
+           var dbEntity = await _context.Products()
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            var response = _mapper.Map<TDto>(dbEntity);
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
     }
 }
