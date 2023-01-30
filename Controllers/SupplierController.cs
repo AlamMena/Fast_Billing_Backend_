@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using API.DbModels.Contexts;
-using API.DbModels.Suppliers;
+using API.DbModels.Inventory.Suppliers;
 using API.Dtos.Inventory.Suppliers;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;

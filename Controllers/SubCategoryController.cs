@@ -37,5 +37,23 @@ namespace API.Controllers
         {
             return await base.GetAllFilteredAsync(request);
         }
+
+
+        [HttpGet("subcategory/{id}")]
+        public override async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var dbEntity = await _context.SubCategories
+                .Include(d => d.Category)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            var responseEntity = _mapper.Map<SubCategoryDto>(dbEntity);
+
+            if (dbEntity is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(responseEntity);
+        }
     }
 }

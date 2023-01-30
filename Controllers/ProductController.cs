@@ -73,7 +73,7 @@ namespace API.Controllers
             {
                 Cost = request.Cost,
                 Price = request.Price,
-                MarginBenefit = 100 * (request.Price - request.Cost) / request.Cost == 0 ? 1 : request.Cost,
+                MarginBenefit = request.MarginBenefit,
 
             });
 
@@ -122,16 +122,16 @@ namespace API.Controllers
         [HttpPut("product")]
         public async Task<IActionResult> PutAsync(ProductUpdateDto request)
         {
-            var product = await _context.Products.FindAsync(request.Id);
+            var product = await _context.Products.Include(d => d.Prices).FirstOrDefaultAsync(d => d.Id == request.Id);
 
             if (product is null)
             {
                 return NotFound();
             }
 
-            await ValidateAsync(product);
-
             _mapper.Map(request, product);
+
+            await ValidateAsync(product);
 
             await _context.SaveChangesAsync();
 
@@ -141,17 +141,25 @@ namespace API.Controllers
         }
 
         [HttpGet("products")]
-        public virtual async Task<IActionResult> GetAllAsync([FromQuery] int page, int limit)
+        public virtual async Task<IActionResult> GetAllAsync([FromQuery] PaginatedFilteredRequest request)
         {
+            var products = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Value))
+            {
+                products = _context.Products.Where(d => d.Name.Contains(request.Value));
+            }
             var response = new PaginatedResponse<ProductDto>
             {
-                Data = await _context.Products
-                 .Skip((page - 1) * limit)
-                 .Take(limit)
+                Data = await products
+                 .Include(d => d.Prices)
+                 .Include(d => d.Stocks)
+                 .Skip((request.Page - 1) * request.Limit)
+                 .Take(request.Limit)
                  .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
                  .ToListAsync(),
 
-                DataQuantity = await _context.Products.CountAsync()
+                DataQuantity = await products.CountAsync()
             };
 
             return Ok(response);
@@ -160,10 +168,15 @@ namespace API.Controllers
         [HttpGet("product/{id}")]
         public virtual async Task<IActionResult> GetByIdAsync(int id)
         {
-           var dbEntity = await _context.Products()
+            var dbEntity = await _context.Products
+                .Include(d => d.Category)
+                .Include(d => d.SubCategory)
+                .Include(d => d.Brand)
+                .Include(d => d.Prices)
+                .Include(d => d.Stocks)
                 .FirstOrDefaultAsync(d => d.Id == id);
 
-            var response = _mapper.Map<TDto>(dbEntity);
+            var response = _mapper.Map<ProductDto>(dbEntity);
 
             if (response is null)
             {

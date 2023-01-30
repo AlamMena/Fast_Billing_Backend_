@@ -1,10 +1,10 @@
 ﻿using API.DbModels.AccountsReceivable;
-using API.DbModels.Contacts;
 using API.DbModels.Core;
 using API.DbModels.Inventory.Products;
 using API.DbModels.Inventory.Warehouses;
 using API.DbModels.Ncf;
 using API.DbModels.Payments;
+using API.DbModels.Sales.Clients;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Invoices
@@ -55,7 +55,7 @@ namespace API.DbModels.Invoices
         public ICollection<InvoiceDetail> Details { get; set; }
         public AccountReceivable AccountReceivable { get; set; } = null!;
         public ICollection<Payment> Payments { get; set; }
- 
+
 
         public Invoice()
         {

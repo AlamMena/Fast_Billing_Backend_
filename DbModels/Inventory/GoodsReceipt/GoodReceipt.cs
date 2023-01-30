@@ -1,9 +1,9 @@
 ﻿using API.DbModels.Accounts.AccountsPayable;
 using API.DbModels.Core;
+using API.DbModels.Inventory.Suppliers;
 using API.DbModels.Inventory.Warehouses;
 using API.DbModels.Ncf;
 using API.DbModels.Payments;
-using API.DbModels.Suppliers;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Inventory.GoodsReceipt

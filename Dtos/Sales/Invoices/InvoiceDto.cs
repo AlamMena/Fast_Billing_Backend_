@@ -7,13 +7,18 @@ namespace API.Dtos.Sales.Invoices
     {
         public int TypeId { get; set; }
         public int WareHouseId { get; set; }
+        public string? ClientName { get; set; }
         public int NcfTypeId { get; set; }
+        public DateTime? Date { get; set; }
+        public string? Ncf { get; set; }
+        public string? InvoiceTypeName { get; set; }
         public int CreditDates { get; set; }
         public int ClientId { get; set; }
         public bool WithTax { get; set; }
         public decimal TotalGrab { get; set; }
         public decimal Total { get; set; }
         public decimal Disccount { get; set; }
+        public decimal TaxAmount { get; set; }
         public decimal TotalPayed { get; set; }
         public string? Note { get; set; }
         public bool Updated { get; set; }

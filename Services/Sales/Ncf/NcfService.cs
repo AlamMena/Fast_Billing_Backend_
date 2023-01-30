@@ -35,7 +35,7 @@ namespace API.Services.Sales.Ncf
                     ParameterName = "company",
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input,
-                    Value = 5,
+                    Value = 1,
                 },
 
                 new SqlParameter()

@@ -1,15 +1,15 @@
-using API.DbModels.Contacts;
 using API.DbModels.Core;
 using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
 using API.DbModels.Inventory.GoodsReceipt;
 using API.DbModels.Inventory.SubCategories;
+using API.DbModels.Inventory.Suppliers;
 using API.DbModels.Inventory.Warehouses;
 using API.DbModels.Invoices;
 using API.DbModels.Ncf;
 using API.DbModels.Payments;
 using API.DbModels.Products;
-using API.DbModels.Suppliers;
+using API.DbModels.Sales.Clients;
 using API.DbModels.System.Branches;
 using API.DbModels.System.Companies;
 using API.Dtos.Core;
@@ -48,10 +48,23 @@ namespace API.Mappers
             CreateMap<Brand, BrandDto>().ReverseMap();
 
             // subcategory
-            CreateMap<SubCategory, SubCategoryDto>().ReverseMap();
+            CreateMap<SubCategory, SubCategoryDto>().ForMember(dest => dest.CategoryName, src => src.MapFrom(m => m.Category.Name));
+            CreateMap<SubCategoryDto, SubCategory>();
 
             // products
-            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Product, ProductDto>()
+            .ForMember(dest => dest.Price, src => src.MapFrom(m => m.Prices.First().Price))
+            .ForMember(dest => dest.Cost, src => src.MapFrom(m => m.Prices.First().Cost))
+            .ForMember(dest => dest.Stock, src => src.MapFrom(m => m.Stocks.Sum(d => d.Stock)))
+            .ForMember(dest => dest.MarginBenefit, src => src.MapFrom(m => m.Prices.First().MarginBenefit))
+            .ForMember(dest => dest.BrandName, src => src.MapFrom(m => m.Brand.Name))
+            .ForMember(dest => dest.CategoryName, src => src.MapFrom(m => m.Category.Name))
+            .ForMember(dest => dest.CategoryName, src => src.MapFrom(m => m.Category.Name))
+            .ForMember(dest => dest.SubCategoryName, src => src.MapFrom(m => m.SubCategory.Name));
+
+            CreateMap<ProductDto, Product>();
+            CreateMap<ProductUpdateDto, Product>().ReverseMap();
+
             CreateMap<ProductImage, ProductImageDto>().ReverseMap();
 
             // warehouse
@@ -72,21 +85,18 @@ namespace API.Mappers
             // client
             CreateMap<Client, ClientDto>().ReverseMap();
             CreateMap<TypeDto, ClientType>().ReverseMap();
-
-            // global
-            CreateMap<Address, AddressDto>().ReverseMap();
-            CreateMap<Contact, ContactDto>().ReverseMap();
-
+            CreateMap<ClientAddress, AddressDto>().ReverseMap();
+            CreateMap<ClientContact, ContactDto>().ReverseMap();
 
             // supplier 
             CreateMap<Supplier, SupplierDto>().ReverseMap();
+            CreateMap<SupplierAddress, AddressDto>().ReverseMap();
+            CreateMap<SupplierContact, ContactDto>().ReverseMap();
+
 
             // payments 
             CreateMap<Payment, PaymentDto>().ReverseMap();
             CreateMap<PaymentType, TypeDto>().ReverseMap();
-
-
-
 
         }
     }

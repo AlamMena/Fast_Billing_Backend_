@@ -1,7 +1,7 @@
 ﻿using API.DbModels.Core;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.DbModels.Contacts
+namespace API.DbModels.Sales.Clients
 {
     [Table("sales_clients")]
     public class Client : TenantModel
@@ -16,17 +16,17 @@ namespace API.DbModels.Contacts
         public int CreditDays { get; set; }
         public bool AllowDiscount { get; set; }
         public decimal Discount { get; set; }
-        public ICollection<Address> Addresses { get; set; }
+        public ICollection<ClientAddress> Addresses { get; set; }
         public ICollection<ClientCard> Cards { get; set; }
-        public ICollection<Contact> Contacts { get; set; }
+        public ICollection<ClientContact> Contacts { get; set; }
         //public ICollection<CuentaPorCobrar> CuentasPorCobrar { get; set; }
         //public ICollection<Factura> Facturas { get; set; }
 
         public Client()
         {
-            Addresses = new HashSet<Address>();
+            Addresses = new HashSet<ClientAddress>();
             Cards = new HashSet<ClientCard>();
-            Contacts = new HashSet<Contact>();
+            Contacts = new HashSet<ClientContact>();
 
             //Facturas = new HashSet<Factura>();
             //CuentasPorCobrar = new HashSet<CuentaPorCobrar>();

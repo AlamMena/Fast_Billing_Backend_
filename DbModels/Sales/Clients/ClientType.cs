@@ -1,7 +1,7 @@
 ﻿using API.DbModels.Core;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.DbModels.Contacts
+namespace API.DbModels.Sales.Clients
 {
     [Table("sales_clients_types")]
     public class ClientType : CoreModel

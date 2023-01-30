@@ -1,6 +1,6 @@
-﻿using API.DbModels.Contacts;
-using API.DbModels.Core;
+﻿using API.DbModels.Core;
 using API.DbModels.Invoices;
+using API.DbModels.Sales.Clients;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.AccountsReceivable

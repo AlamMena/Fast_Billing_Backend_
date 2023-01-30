@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using API.DbModels.Contacts;
 using API.DbModels.Contexts;
+using API.DbModels.Sales.Clients;
 using API.Dtos.Core;
 using API.Dtos.Sales.Clients;
 using AutoMapper;

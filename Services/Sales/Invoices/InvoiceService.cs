@@ -55,7 +55,7 @@ namespace API.Services.Sales.Invoices
             {
                 if (invoice.Client.TypeId == (int)ClientTypes.Cash)
                 {
-                    throw new ValidationException("The client dosen't have allowed this invoice type");
+                    throw new ValidationException("The client does not have permission to this type of invoice");
                 }
             }
 
@@ -111,18 +111,17 @@ namespace API.Services.Sales.Invoices
                 detail.Cost = product.Prices.First().Cost;
                 detail.Price = product.Prices.First().Price;
                 detail.Tax = product.Tax;
-                detail.TaxAmount = detail.Price * detail.Tax > 0 ? (detail.Tax / 100) : 1;
+                detail.TaxAmount = (detail.Price * detail.Quantity) * (detail.Tax / 100);
                 detail.Discount = 0;
                 detail.DiscountAmount = 0;
                 detail.Excent = false;
-                detail.Total = (detail.Price * detail.Quantity) * (detail.Tax > 0 ? (detail.Tax / 100) : 1);
+                detail.Total = (detail.Price * detail.Quantity) + detail.TaxAmount;
             }
 
             // calculating header
             invoice.Subtotal = invoice.Details.Sum(d => d.Price);
             invoice.Tax = invoice.Details.Sum(d => d.Tax / 100);
             invoice.TaxAmount = invoice.Details.Sum(d => d.TaxAmount);
-            invoice.Discount = 0;
             invoice.TotalPayed = invoice.Payments.Sum(d => d.Amount);
             invoice.Return = invoice.TotalPayed - invoice.Total;
             invoice.Total = invoice.Details.Sum(d => d.Total);

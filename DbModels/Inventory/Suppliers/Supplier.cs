@@ -2,7 +2,7 @@
 using API.DbModels.Inventory.Currencies;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace API.DbModels.Suppliers
+namespace API.DbModels.Inventory.Suppliers
 {
     [Table("inventory_suppliers")]
     public class Supplier : TenantModel
@@ -17,13 +17,13 @@ namespace API.DbModels.Suppliers
         public int CurrencyId { get; set; } = 1;
         public virtual Currency Currency { get; set; } = null!;
         //public int NCFTipoId { get; set; }
-        public ICollection<Address> Addresses { get; set; }
-        public ICollection<Contact> Contacts { get; set; }
+        public ICollection<SupplierAddress> Addresses { get; set; }
+        public ICollection<SupplierContact> Contacts { get; set; }
 
         public Supplier()
         {
-            Addresses = new HashSet<Address>();
-            Contacts = new HashSet<Contact>();
+            Addresses = new HashSet<SupplierAddress>();
+            Contacts = new HashSet<SupplierContact>();
         }
         //public ProveedorNCFTipo NCFTipo { get; set; } = null!;
         //public int TipoGastoId { get; set; }

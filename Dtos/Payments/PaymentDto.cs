@@ -7,7 +7,7 @@ namespace API.Dtos.Payments
         public DateTime Date { get; set; }
         public int? CardNumber { get; set; }
         public int? BankId { get; set; }
-        public int PaymentTypeId { get; set; }
+        public int typeId { get; set; }
         public decimal Amount { get; set; }
     }
 }

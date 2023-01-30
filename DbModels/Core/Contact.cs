@@ -2,7 +2,6 @@
 
 namespace API.DbModels.Core
 {
-    [Table("globals_contacts")]
     public class Contact : CoreModel
     {
         public string Name { get; set; } = null!;

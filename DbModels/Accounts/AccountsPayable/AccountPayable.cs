@@ -1,7 +1,5 @@
 ﻿using API.DbModels.Core;
-using API.DbModels.Ncf;
-using API.DbModels.Suppliers;
-using API.Enums;
+using API.DbModels.Inventory.Suppliers;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.Accounts.AccountsPayable

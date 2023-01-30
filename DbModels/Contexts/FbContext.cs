@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using API.DbModels.Inventory.Brands;
 using API.DbModels.Inventory.Categories;
 using API.DbModels.Products;
-using API.DbModels.Contacts;
 using API.DbModels.Invoices;
 using API.DbModels.Accounts.AccountsPayable;
 using API.DbModels.AccountsReceivable;
@@ -17,8 +16,9 @@ using API.DbModels.Inventory.Warehouses;
 using API.Enums;
 using API.DbModels.Payments;
 using API.DbModels.Inventory.Products;
-using API.DbModels.Suppliers;
 using API.DbModels.Inventory.GoodsReceipt;
+using API.DbModels.Inventory.Suppliers;
+using API.DbModels.Sales.Clients;
 
 namespace API.DbModels.Contexts
 {

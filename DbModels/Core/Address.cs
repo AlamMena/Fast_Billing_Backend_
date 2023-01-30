@@ -2,7 +2,6 @@
 
 namespace API.DbModels.Core
 {
-    [Table("globals_addresses")]
     public class Address : CoreModel
     {
         public string Name { get; set; } = null!;
