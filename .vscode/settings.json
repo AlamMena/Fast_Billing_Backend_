@@ -1,4 +1,5 @@
 {
   "appService.preDeployTask": "publish-release",
-  "appService.deploySubpath": "bin/Release/net6.0/publish"
+  "appService.deploySubpath": "bin/Release/net6.0/publish",
+  "appService.defaultWebAppToDeploy": "/subscriptions/78cf1836-0583-4a44-8f1c-e9c29051fb35/AppServices/subscriptions/78cf1836-0583-4a44-8f1c-e9c29051fb35/resourceGroups/fastbilling_group/providers/Microsoft.Web/sites/fastbilling"
 }
