@@ -33,10 +33,11 @@ namespace API.Services.Inventory
             }
 
             receipt.SupplierName = supplier.Name;
-            receipt.SupplierAddress = supplier.Addresses.First().Address1;
-            receipt.SupplierPhone = supplier.Contacts.First().Number;
+            receipt.SupplierAddress = supplier.Addresses.FirstOrDefault()?.Address1;
+            receipt.SupplierPhone = supplier.Contacts.FirstOrDefault()?.Number;
             receipt.SupplierNoIdentification = supplier.NoIdentification;
             receipt.SupplierEmail = supplier.Email;
+            receipt.Supplier = supplier;
 
             return true;
         }
@@ -85,6 +86,7 @@ namespace API.Services.Inventory
                 var product = products.First(d => d.Id == detail.ProductId);
 
                 detail.ProductName = product.Name;
+                detail.WarehouseId = receipt.WarehouseId;
 
                 // calculating details
                 detail.Product = product;
@@ -116,6 +118,7 @@ namespace API.Services.Inventory
                 Ncf = receipt.Ncf,
                 Date = receipt.Date,
                 ExpirationDate = receipt.Date.AddDays(receipt.Days),
+                SupplierId = receipt.SupplierId,
                 SupplierName = receipt.Supplier.Name,
                 SupplierReceipt = receipt.InvoiceNumber,
                 SupplierNoIdentification = receipt.SupplierNoIdentification,
@@ -200,7 +203,7 @@ namespace API.Services.Inventory
             {
                 var product = products.First(d => d.Id == detail.ProductId);
 
-                if (product.Stocks.FirstOrDefault(d => d.WarehouseId == detail.WarehouseId) is null)
+                if (product.Stocks.FirstOrDefault(d => d.WarehouseId == receipt.WarehouseId) is null)
                 {
                     product.Stocks.Add(new ProductStock
                     {
@@ -211,7 +214,7 @@ namespace API.Services.Inventory
 
                 await _context.AddAsync(new ProductTransaction
                 {
-                    WarehouseId = detail.WarehouseId,
+                    WarehouseId = receipt.WarehouseId,
                     ProductCost = detail.Cost,
                     ProductPrice = detail.Price,
                     Quantity = detail.Quantity,
@@ -227,7 +230,7 @@ namespace API.Services.Inventory
                     BranchId = _context.tenant.BranchId,
                 });
 
-                var productStock = product.Stocks.First(d => d.WarehouseId == detail.WarehouseId);
+                var productStock = product.Stocks.First(d => d.WarehouseId == receipt.WarehouseId);
                 productStock.Stock = productStock.Transactions.Sum(d => (int)d.Sign * d.Quantity);
 
             }

@@ -21,9 +21,9 @@ namespace API.Controllers
         {
             var receipt = _mapper.Map<GoodReceipt>(request);
             await _goodReceiptService.PostGoodReceiptAsync(receipt);
-            _mapper.Map<GoodReceiptDto>(receipt);
+            var response = _mapper.Map<GoodReceiptDto>(receipt);
 
-            return Ok(receipt);
+            return Ok(response);
         }
     }
 }

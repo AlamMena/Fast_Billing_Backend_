@@ -6,6 +6,7 @@ namespace API.Dtos.Inventory.GoodReceipt
     public class GoodReceiptDto : CoreDto
     {
         public int TypeId { get; set; }
+        public string? InvoiceNumber { get; set; }
         public int WareHouseId { get; set; }
         public int NcfTypeId { get; set; }
         public int CreditDates { get; set; }
