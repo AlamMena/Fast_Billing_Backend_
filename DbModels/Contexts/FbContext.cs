@@ -19,6 +19,7 @@ using API.DbModels.Inventory.Products;
 using API.DbModels.Inventory.GoodsReceipt;
 using API.DbModels.Inventory.Suppliers;
 using API.DbModels.Sales.Clients;
+using API.DbModels.Errors;
 
 namespace API.DbModels.Contexts
 {
@@ -36,6 +37,10 @@ namespace API.DbModels.Contexts
                 : base(options)
         {
             tenant = tenantRequest;
+        }
+        public FbContext(DbContextOptions<FbContext> options)
+               : base(options)
+        {
         }
         // ----- system ----- 
         public virtual DbSet<Company> Companies { get; set; } = null!;
@@ -92,7 +97,7 @@ namespace API.DbModels.Contexts
 
         // --- warehouse ---
         public virtual DbSet<Warehouse> Warehouses { get; set; } = null!;
-
+        public virtual DbSet<Error> Errors { get; set; } = null!;
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         // {
@@ -136,12 +141,12 @@ namespace API.DbModels.Contexts
                 if (entity.CreatedBy == 0)
                 {
                     entity.IsDeleted = false;
-                    entity.CreatedBy = tenant.UserId;
+                    entity.CreatedBy = tenant?.UserId ?? 0;
                     entity.CreationDate = DateTime.Now;
                 }
                 else
                 {
-                    entity.UpdatedBy = tenant.UserId;
+                    entity.UpdatedBy = tenant?.UserId ?? 0;
                     entity.UpdatedDate = DateTime.Now;
                 }
 

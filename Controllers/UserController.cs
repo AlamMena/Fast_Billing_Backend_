@@ -67,6 +67,7 @@ public class UsersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateUserAsync(UserDto request)
     {
+
         var user = await _userManagement.CreateUserAsync(request);
 
         var userResponse = _mapper.Map<UserDto>(user);

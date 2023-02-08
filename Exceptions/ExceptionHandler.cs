@@ -1,7 +1,10 @@
 
+using API.DbModels.Contexts;
+using API.DbModels.Errors;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -45,37 +48,23 @@ namespace API.Exceptions
             }
             catch (Exception error)
             {
-                //var exceptionDetails = httpContext.Features.Get<IExceptionHandlerFeature>();
-                //var error = exceptionDetails?.Error;
-
                 context.Response.ContentType = "application/problem+json";
 
-                //if (error?.GetType().Name == nameof(ArgumentException))
-                //{
-                //    await BuildResponse(context, HttpStatusCode.Unauthorized, "Unauthorized User", error.Message);
-                //}
-                // else if (error?.GetType().Name == nameof(NotFoundException))
-                // {
-                //     await BuildResponse(context, HttpStatusCode.NotFound, "Not found", error.Message);
-                // }
-                // else if (error?.GetType().Name == nameof(ForbidenException))
-                // {
-                //     await BuildResponse(context, HttpStatusCode.Forbidden, "Unauthorized Action", error.Message);
-                // }
-                // else
-                // {
-                await BuildResponse(context, HttpStatusCode.InternalServerError, error.ToString(), error?.InnerException?.ToString()!);
+                var builder = new DbContextOptionsBuilder<FbContext>();
+                var connection = context.RequestServices.GetRequiredService<IConfiguration>();
+                builder.UseSqlServer(connection.GetConnectionString("development"));
+                var contextDb = new FbContext(builder.Options);
 
-                // // save log
-                // var contextDb = (POSContext)context.RequestServices.GetService(typeof(POSContext))!;
-                // await contextDb.AddAsync(new Error()
-                // {
-                //     Message = error?.Message!,
-                //     Exception = Newtonsoft.Json.JsonConvert.SerializeObject(error?.InnerException),
-                //     Fecha = DateTime.Now,
-                // });
-                // await contextDb.SaveChangesAsync();
-                // }
+                await contextDb.AddAsync(new Error()
+                {
+                    Message = error?.Message!,
+                    Exception = Newtonsoft.Json.JsonConvert.SerializeObject(error?.InnerException),
+                    CreationDate = DateTime.Now,
+                });
+
+                await contextDb.SaveChangesAsync();
+
+                await BuildResponse(context, HttpStatusCode.InternalServerError, error?.ToString()!, error?.InnerException?.ToString()!);
             }
             finally
             {
