@@ -93,7 +93,7 @@ namespace API.Services.Inventory
                 detail.Cost = product.Prices.First().Cost;
                 detail.Price = product.Prices.First().Price;
                 detail.Tax = product.Tax;
-                detail.TaxAmount = detail.Price * detail.Tax > 0 ? (detail.Tax / 100) : 1;
+                detail.TaxAmount = (detail.Price * detail.Quantity) * (detail.Tax > 0 ? (detail.Tax / 100) : 1);
                 detail.Discount = 0;
                 detail.DiscountAmount = 0;
                 detail.Excent = false;
