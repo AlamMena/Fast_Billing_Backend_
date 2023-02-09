@@ -171,7 +171,6 @@ namespace API.Services.Inventory
                     payment.BankId = null;
                     payment.CompanyId = _context.tenant.CompanyId;
                     payment.BranchId = _context.tenant.BranchId;
-                    payment.Amount = receipt.TotalPayed >= receipt.Total ? receipt.Total : payment.Amount;
                     payment.Document = AccountDocuments.Invoice.GetDocumentKey();
                     payment.Reference = receipt.DocNum;
                 }
