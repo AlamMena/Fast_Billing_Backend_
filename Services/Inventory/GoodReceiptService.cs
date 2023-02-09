@@ -97,7 +97,7 @@ namespace API.Services.Inventory
                 detail.Discount = 0;
                 detail.DiscountAmount = 0;
                 detail.Excent = false;
-                detail.Total = (detail.Price * detail.Quantity) * (detail.Tax > 0 ? (detail.Tax / 100) : 1);
+                detail.Total = (detail.Price * detail.Quantity) + detail.TaxAmount;
             }
 
             // calculating header
