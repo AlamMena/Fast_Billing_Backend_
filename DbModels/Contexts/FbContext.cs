@@ -20,6 +20,8 @@ using API.DbModels.Inventory.GoodsReceipt;
 using API.DbModels.Inventory.Suppliers;
 using API.DbModels.Sales.Clients;
 using API.DbModels.Errors;
+using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace API.DbModels.Contexts
 {
@@ -198,18 +200,20 @@ namespace API.DbModels.Contexts
         }
         public void SetQueryFilters(ModelBuilder modelBuilder)
         {
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            Expression<Func<CoreModel, bool>> filterExpr = bm => !bm.IsDeleted;
+            foreach (var mutableEntityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (!typeof(TenantModel).IsAssignableFrom(entityType.ClrType))
+                // check if current entity type is child of BaseModel
+                if (mutableEntityType.ClrType.IsAssignableTo(typeof(CoreModel)))
                 {
-                    continue;
-                }
+                    // modify expression to handle correct child type
+                    var parameter = Expression.Parameter(mutableEntityType.ClrType);
+                    var body = ReplacingExpressionVisitor.Replace(filterExpr.Parameters.First(), parameter, filterExpr.Body);
+                    var lambdaExpression = Expression.Lambda(body, parameter);
 
-                // getting method to set query filter
-                GetType()
-                    .GetMethod(nameof(SetTenant))
-                    ?.MakeGenericMethod(entityType.ClrType)
-                    .Invoke(this, new object[] { modelBuilder });
+                    // set filter
+                    mutableEntityType.SetQueryFilter(lambdaExpression);
+                }
             }
         }
     }

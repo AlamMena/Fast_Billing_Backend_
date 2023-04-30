@@ -12,6 +12,7 @@ namespace API.DbModels.AccountsReceivable
         public string Document { get; set; } = null!;
         public AccountReceivable Account { get; set; } = null!;
         public int Reference { get; set; }
+        public DateTime Date { get; set; }
 
     }
 }

@@ -138,7 +138,7 @@ namespace API.Services.Sales.Invoices
                 ClientId = invoice.ClientId,
                 ClientName = invoice.Client.Name,
                 ClientDocNum = invoice.Client.DocNum,
-                InitialDate = invoice.Date,
+                Date = invoice.Date,
                 ExpirationDate = invoice.NcfExpiration,
                 TaxAmount = invoice.TaxAmount,
                 Amount = invoice.Total,

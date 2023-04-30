@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "SZHEmO5e2OKlYs8G2nKPpp1hYOuEtEBSITRxMBB8+VQ=",
+  "Source": "API",
+  "BasePath": "_content/API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "API/wwwroot",
+      "Source": "API",
+      "ContentRoot": "/Users/alam/Desktop/Proyects/Fast_Billing_Backend_/wwwroot/",
+      "BasePath": "_content/API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/alam/Desktop/Proyects/Fast_Billing_Backend_/wwwroot/fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json",
+      "SourceId": "API",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/alam/Desktop/Proyects/Fast_Billing_Backend_/wwwroot/",
+      "BasePath": "_content/API",
+      "RelativePath": "fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/fast-billing-775f5-firebase-adminsdk-tceqx-6c1d0bac1f.json"
+    }
+  ]
+}

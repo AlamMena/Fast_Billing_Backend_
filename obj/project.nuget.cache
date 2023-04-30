@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "K2is9prD8p7dkGfv+xGruSh7L/R+e2oWkebD0pK+zK+OxIg7nKcWRP71k5WDF/HWeiFGCBNzwjYkz0lxMKryhg==",
+  "dgSpecHash": "n1HmLq7nsiaOmcWs6vC0WSEAceWeqCLV1Btu4NHx8WK51zQKEj3rEoVXPlRCx4mP9+BI0WgATbr8vbJKJ7QauA==",
   "success": true,
-  "projectFilePath": "/Users/alam/Desktop/Fast-Billing/Fast_Billing_Backend_/API.csproj",
+  "projectFilePath": "/Users/alam/Desktop/Proyects/Fast_Billing_Backend_/API.csproj",
   "expectedPackageFiles": [
     "/Users/alam/.nuget/packages/automapper/11.0.1/automapper.11.0.1.nupkg.sha512",
     "/Users/alam/.nuget/packages/efcore.namingconventions/6.0.0/efcore.namingconventions.6.0.0.nupkg.sha512",

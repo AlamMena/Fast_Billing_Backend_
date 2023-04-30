@@ -211,6 +211,9 @@ namespace API.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -222,9 +225,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("InitialDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("InvoiceId")
@@ -257,7 +257,7 @@ namespace API.Migrations
                         .IsUnique()
                         .HasFilter("[InvoiceId] IS NOT NULL");
 
-                    b.ToTable("accounts_recivable");
+                    b.ToTable("accounts_receivable");
                 });
 
             modelBuilder.Entity("API.DbModels.AccountsReceivable.AccountReceivableTransaction", b =>

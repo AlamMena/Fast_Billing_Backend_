@@ -10404,11 +10404,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/alam/Desktop/Fast-Billing/Fast_Billing_Backend_/API.csproj",
+      "projectUniqueName": "/Users/alam/Desktop/Proyects/Fast_Billing_Backend_/API.csproj",
       "projectName": "API",
-      "projectPath": "/Users/alam/Desktop/Fast-Billing/Fast_Billing_Backend_/API.csproj",
+      "projectPath": "/Users/alam/Desktop/Proyects/Fast_Billing_Backend_/API.csproj",
       "packagesPath": "/Users/alam/.nuget/packages/",
-      "outputPath": "/Users/alam/Desktop/Fast-Billing/Fast_Billing_Backend_/obj/",
+      "outputPath": "/Users/alam/Desktop/Proyects/Fast_Billing_Backend_/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/alam/.nuget/NuGet/NuGet.Config"

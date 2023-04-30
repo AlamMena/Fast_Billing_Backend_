@@ -5,14 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.DbModels.AccountsReceivable
 {
-    [Table("accounts_recivable")]
+    [Table("accounts_receivable")]
     public class AccountReceivable : TenantModel
     {
         public int ClientId { get; set; }
         public Client Client { get; set; } = null!;
         public string? ClientName { get; set; }
         public int? ClientDocNum { get; set; }
-        public DateTime InitialDate { get; set; }
+        public DateTime Date { get; set; }
         public DateTime? ExpirationDate { get; set; }
         public string? Description { get; set; }
         public decimal TaxAmount { get; set; }

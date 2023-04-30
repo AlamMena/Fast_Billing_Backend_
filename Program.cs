@@ -9,6 +9,8 @@ using API.Services.Users;
 using API.Swagger;
 using Microsoft.OpenApi.Models;
 using API.Services.Inventory;
+using API.Services.Sales.Reports;
+using API.Services.Accounts.Reports;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,8 @@ builder.Services.AddScoped<IUserManagement, UserManagement>();
 builder.Services.AddScoped<INcfService, NcfService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IGoodReceiptService, GoodReceiptService>();
+builder.Services.AddScoped<ISalesReportService, SalesReportService>();
+builder.Services.AddScoped<IAccountReportService, AccountsReportService>();
 
 
 // lib services
