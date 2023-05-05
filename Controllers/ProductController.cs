@@ -196,7 +196,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            dbEntity.IsDeleted = false;
+            dbEntity.IsDeleted = true;
 
             await _context.SaveChangesAsync();
 
