@@ -200,7 +200,7 @@ namespace API.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(response);
+            return Ok();
         }
     }
 }
