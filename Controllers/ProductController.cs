@@ -185,5 +185,23 @@ namespace API.Controllers
 
             return Ok(response);
         }
+
+        [HttpDelete("product/{id}")]
+        public virtual async Task<IActionResult> DeleteProduct(int id)
+        {
+            var dbEntity = await _context.Products.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (dbEntity is null)
+            {
+                return NotFound();
+            }
+            var response = _mapper.Map<ProductDto>(dbEntity);
+
+            dbEntity.IsDeleted = false;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(response);
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace API.Services.Accounts.Reports
             _context = context;
         }
 
-        private async Task<List<ReportByDateDetail>> GetYesterdayAndTodayTransactions()
+        private async Task<List<ReportByDateDetail>> GetAllTransactionsOfCurrentMonth()
         {
             var response = await _context.AccountsPaybleTransactions.Select(d => new // profit transactions
             {
@@ -29,7 +29,7 @@ namespace API.Services.Accounts.Reports
                 d.Sign
 
             }))
-           .Where(d => d.Date.Month == DateTime.Now.Month && d.Date.Year == DateTime.Now.Year && (d.Date.Day == DateTime.Now.Day - 1 || d.Date.Day == DateTime.Now.Day))
+           .Where(d => d.Date.Month == DateTime.Now.Month && d.Date.Year == DateTime.Now.Year)
            .GroupBy(d => d.Date.Day)
            .Select(d => new ReportByDateDetail
            {
@@ -42,7 +42,7 @@ namespace API.Services.Accounts.Reports
         }
         public async Task<ReportByDate> GetLastMonthBalanceByDay()
         {
-            var transactions = await GetYesterdayAndTodayTransactions();
+            var transactions = await GetAllTransactionsOfCurrentMonth();
 
             var balanceYesterday = transactions.Where(d => d.Date.Day == DateTime.Now.Day - 1).Sum(d => d.Value);
             var balanceToday = transactions.Where(d => d.Date.Day == DateTime.Now.Day).Sum(d => d.Value);
