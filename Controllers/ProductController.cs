@@ -195,7 +195,6 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            var response = _mapper.Map<ProductDto>(dbEntity);
 
             dbEntity.IsDeleted = false;
 
